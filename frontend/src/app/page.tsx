@@ -1,9 +1,5 @@
-import { Box, Title } from "@mantine/core";
+import { MainPage } from "@/views/main";
 
 export default function Home() {
-    return (
-        <Box>
-            <Title order={1}>Тестируем сайт</Title>
-        </Box>
-    );
+    return <MainPage></MainPage>
 }

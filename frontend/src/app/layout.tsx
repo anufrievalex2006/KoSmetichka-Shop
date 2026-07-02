@@ -1,18 +1,11 @@
 import type { Metadata } from "next";
-import { Inter, Nunito } from "next/font/google";
+import { Nunito } from "next/font/google";
 import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
 import "@mantine/notifications/styles.css";
 import "./globals.css";
 import { MantineProvider } from "@mantine/core";
 import { QueryProvider } from "@/shared/providers/QueryProvider";
-
-const inter = Inter({
-    subsets: ['cyrillic', 'latin'],
-    variable: '--font-inter',
-    weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
-    display: 'swap'
-})
 
 const nunito = Nunito({
     subsets: ['cyrillic', 'latin'],
@@ -32,7 +25,7 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="ru" className={`${nunito.variable} ${inter.variable}`}>
+        <html lang="ru" className={`${nunito.variable}`}>
             <body>
                 <QueryProvider>
                     <MantineProvider>

@@ -1,0 +1,20 @@
+@use "@/shared/styles/vars" as *;
+@use "@/shared/styles/mixins" as *;
+@use "@/shared/styles/fonts" as *;
+
+.header {
+    padding: 32px;
+    justify-content: space-between;
+    border-bottom: 10px solid $color-700;
+}
+
+.shopName {
+    @include h1;
+    @include mobile {
+        @include h1-mobile;
+    }
+    font-weight: 700;
+}
+.shopName span {
+    color: $color-700;
+}
