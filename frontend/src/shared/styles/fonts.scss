@@ -1,0 +1,7 @@
+@use "@/shared/styles/vars" as *;
+
+@mixin base {
+    font-family: var(--font-nunito), var(--font-inter), sans-serif;
+    font-weight: 500;
+    color: $text;
+}
