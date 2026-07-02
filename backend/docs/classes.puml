@@ -1,0 +1,138 @@
+@startuml ClassesKosmetichka
+left to right direction
+class User {
+    - Id: UUID
+    + Name: string
+    + Email: string
+    + Phone: string
+    + Role: UserRole
+    + CreatedAt: datetime
+    + UpdatedAt: datetime
+}
+enum UserRole {
+    Admin
+    Creator
+    Client
+    Supplier
+}
+
+class Appeal {
+    - Id: UUID
+    + Content: string
+    + Status: AppealStatus
+    + ContactPhone: string
+    + ContactEmail: string
+}
+enum AppealStatus {
+    InProcess
+    Accepted
+    Rejected
+    New
+}
+class ClientQuestion {
+    + FullName: string
+}
+class SupplierRequest {
+    + CompanyName: string
+}
+
+class Product {
+    - Id: UUID
+    + Name: string
+    + BarCodeNumber: string
+    + Article: string
+    + Description: string
+    + Quantity: int
+    + Price: decimal
+}
+class Brand {
+    - Id: UUID
+    + Name: string
+    + Description: string
+    + LogoURL: string
+}
+class Category {
+    - Id: UUID
+    + Name: string
+}
+class Attribute {
+    - Id: UUID
+    + Name: string
+    + Type: AttributeType
+    + Unit: string
+}
+enum AttributeType {
+    Int
+    Float
+    Text
+    Enum
+}
+class AttributeValue {
+    - ProductId: UUID
+    - AttributeId: UUID
+    + Value: string
+}
+class Cart {
+    - Id: UUID
+}
+class CartPosition {
+    - CartId: UUID
+    - ProductId: UUID
+    + Quantity: int
+    + Price: decimal
+}
+
+class ContentCard {
+    - Id: UUID
+    + Title: string
+    + Description: string
+    + Type: ContentType
+    + PhotoURL: string
+    + CreatedAt: datetime
+    + UpdatedAt: datetime
+}
+enum ContentType {
+    News
+    Promo
+}
+
+class Shop {
+    - Id: UUID
+    + Name: string
+    + Description: string
+    + Address: string
+}
+class ShopContact {
+    - Id: UUID
+    + Name: string
+    + Type: ContactType
+    + Value: string
+}
+enum ContactType {
+    Phone
+    Email
+    SocialMedia
+}
+
+User ..> UserRole
+
+Appeal <|-- ClientQuestion
+Appeal <|-- SupplierRequest
+Appeal ..> AppealStatus
+User "0..1" --> "*" Appeal
+
+Attribute ..> AttributeType
+Attribute *-- AttributeValue
+Category *-- Attribute
+Product "*" --> "1" Category
+Product "*" --> "1" Brand
+Product *-- AttributeValue
+Cart *-- CartPosition
+User "1" -- "1" Cart
+CartPosition "*" --> "1" Product
+
+ContentCard ..> ContentType
+
+Shop *-- ShopContact
+ShopContact ..> ContactType
+@enduml

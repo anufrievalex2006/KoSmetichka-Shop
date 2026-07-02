@@ -1,0 +1,29 @@
+### Backend (Maven) ###
+backend/target/
+backend/.mvn/wrapper/maven-wrapper.jar
+backend/src/main/resources/application-local.properties
+
+### Backend IDE ###
+.idea/
+*.iws
+*.iml
+*.ipr
+.vscode/
+
+### Frontend (Next.js) ###
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/build/
+frontend/.env*
+frontend/*.tsbuildinfo
+frontend/next-env.d.ts
+
+### Misc ###
+.DS_Store
+Thumbs.db
+*.log
+
+### Root env (docker-compose secrets) ###
+.env
+.env.local
