@@ -4,6 +4,8 @@ import com.kosmetichka.backend.dtos.requests.create.ClientQuestionCreateDto;
 import com.kosmetichka.backend.dtos.requests.create.SupplierRequestCreateDto;
 import com.kosmetichka.backend.dtos.requests.update.AppealUpdateDto;
 import com.kosmetichka.backend.dtos.responses.AppealResponse;
+import com.kosmetichka.backend.dtos.responses.ClientQuestionResponse;
+import com.kosmetichka.backend.dtos.responses.SupplierRequestResponse;
 import com.kosmetichka.backend.models.api.Appeal;
 import com.kosmetichka.backend.models.api.ClientQuestion;
 import com.kosmetichka.backend.models.api.SupplierRequest;
@@ -37,12 +39,12 @@ public class AppealService {
             throw new BadRequestException("Неизвестный тип обращения");
         }).toList();
     }
-    public AppealResponse createQuestion(ClientQuestionCreateDto req) {
+    public ClientQuestionResponse createQuestion(ClientQuestionCreateDto req) {
         ClientQuestion q = mapper.toEntity(req);
         q.setStatus(AppealStatus.NEW);
         return mapper.toResponse(questionRepo.save(q));
     }
-    public AppealResponse createSupplierRequest(SupplierRequestCreateDto req) {
+    public SupplierRequestResponse createSupplierRequest(SupplierRequestCreateDto req) {
         SupplierRequest r = mapper.toEntity(req);
         r.setStatus(AppealStatus.NEW);
         return mapper.toResponse(supplierRepo.save(r));
