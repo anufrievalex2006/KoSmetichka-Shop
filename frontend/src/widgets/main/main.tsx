@@ -1,4 +1,5 @@
 import { Stack, Title } from "@mantine/core"
+import styles from "@/shared/styles/main.module.scss";
 
 export const Main = () => {
     return (
