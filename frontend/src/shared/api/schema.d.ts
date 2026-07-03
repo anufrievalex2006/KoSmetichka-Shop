@@ -663,10 +663,6 @@ export interface components {
             phone: string;
             password: string;
         };
-        AuthResponse: {
-            accessToken: string;
-            refreshToken: string;
-        };
         ResetPasswordDto: {
             token: string;
             newPassword: string;
@@ -803,13 +799,6 @@ export interface components {
             /** Format: int64 */
             count: number;
         };
-        Pageable: {
-            /** Format: int32 */
-            page?: number;
-            /** Format: int32 */
-            size?: number;
-            sort?: string[];
-        };
         PageResponseProductResponse: {
             content: components["schemas"]["ProductResponse"][];
             /** Format: int32 */
@@ -877,13 +866,18 @@ export interface operations {
     };
     getAll: {
         parameters: {
-            query: {
+            query?: {
                 search?: string;
                 categoryId?: string;
                 brandId?: string;
                 minPrice?: number;
                 maxPrice?: number;
-                pageable: components["schemas"]["Pageable"];
+                /** @description Zero-based page index (0..N) */
+                page?: number;
+                /** @description The size of the page to be returned */
+                size?: number;
+                /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+                sort?: string[];
             };
             header?: never;
             path?: never;
@@ -1131,9 +1125,7 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content: {
-                    "*/*": components["schemas"]["AuthResponse"];
-                };
+                content?: never;
             };
         };
     };
@@ -1153,9 +1145,7 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content: {
-                    "*/*": components["schemas"]["AuthResponse"];
-                };
+                content?: never;
             };
         };
     };
@@ -1239,9 +1229,7 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content: {
-                    "*/*": components["schemas"]["AuthResponse"];
-                };
+                content?: never;
             };
         };
     };

@@ -25,23 +25,22 @@ public class AuthController {
     private final AuthService service;
     private final PasswordResetService resetService;
 
+    public record RefreshRequest(String refreshToken) {}
+
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@Valid  @RequestBody RegisterDto req, HttpServletResponse res) {
         AuthResponse tokens = service.register(req);
-        setAuthCookies(res, tokens);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(tokens);
     }
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginDto req, HttpServletResponse res) {
         AuthResponse tokens = service.login(req);
-        setAuthCookies(res, tokens);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(tokens);
     }
     @PostMapping("/refresh")
-    public ResponseEntity<AuthResponse> refresh(@CookieValue("refreshToken") String refreshToken, HttpServletResponse res) {
-        AuthResponse tokens = service.refresh(refreshToken);
-        setAuthCookies(res, tokens);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<AuthResponse> refresh(@RequestBody RefreshRequest req, HttpServletResponse res) {
+        AuthResponse tokens = service.refresh(req.refreshToken);
+        return ResponseEntity.ok(tokens);
     }
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(HttpServletResponse res) {
@@ -59,25 +58,6 @@ public class AuthController {
         return ResponseEntity.noContent().build();
     }
 
-    private void setAuthCookies(HttpServletResponse res, AuthResponse tokens) {
-        ResponseCookie access = ResponseCookie.from("accessToken", tokens.getAccessToken())
-                .httpOnly(false)
-                .secure(false)
-                .sameSite("Lax")
-                .path("/")
-                .maxAge(Duration.ofMillis(900000))
-                .build();
-        ResponseCookie refresh = ResponseCookie.from("refreshToken", tokens.getRefreshToken())
-                .httpOnly(true)
-                .secure(false)
-                .sameSite("Lax")
-                .path("/api/auth")
-                .maxAge(Duration.ofMillis(2592000000L))
-                .build();
-
-        res.addHeader(HttpHeaders.SET_COOKIE, access.toString());
-        res.addHeader(HttpHeaders.SET_COOKIE, refresh.toString());
-    }
     private void clearAuthCookies(HttpServletResponse res) {
         ResponseCookie access = ResponseCookie.from("accessToken", "").path("/").maxAge(0).build();
         ResponseCookie refresh = ResponseCookie.from("refreshToken", "").path("/api/auth").maxAge(0).build();

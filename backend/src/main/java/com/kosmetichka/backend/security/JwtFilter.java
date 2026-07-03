@@ -29,7 +29,7 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         String token = header.substring(7);
-        if (service.isTokenValid(token)) {
+        if (service.isTokenValid(token) && service.isTokenOfType(token, "access")) {
             String email = service.extractEmail(token);
             UserDetails userDetails = detailsService.loadUserByUsername(email);
             UsernamePasswordAuthenticationToken auth =

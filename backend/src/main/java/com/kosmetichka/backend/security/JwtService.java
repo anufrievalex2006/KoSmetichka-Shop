@@ -22,9 +22,10 @@ public class JwtService {
     private SecretKey getKey() {
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
     }
-    private String buildToken(String subject, long expiration) {
+    private String buildToken(String subject, long expiration, String type) {
         return Jwts.builder()
                 .subject(subject)
+                .claim("type", type)
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(getKey())
@@ -32,10 +33,24 @@ public class JwtService {
     }
 
     public String generateAccessToken(UserPrincipal pr) {
-        return buildToken(pr.getUsername(), accessExpiration);
+        return buildToken(pr.getUsername(), accessExpiration, "access");
     }
     public String generateRefreshToken(UserPrincipal pr) {
-        return buildToken(pr.getUsername(), refreshExpiration);
+        return buildToken(pr.getUsername(), refreshExpiration, "refresh");
+    }
+    public boolean isTokenOfType(String token, String type) {
+        try {
+            String t = Jwts.parser()
+                    .verifyWith(getKey())
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload()
+                    .get("type", String.class);
+            return type.equals(t);
+        }
+        catch (JwtException | IllegalArgumentException e) {
+            return false;
+        }
     }
     public String extractEmail(String token) {
         return Jwts.parser()

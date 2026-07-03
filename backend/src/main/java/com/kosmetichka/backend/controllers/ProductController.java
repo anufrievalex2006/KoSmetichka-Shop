@@ -8,6 +8,7 @@ import com.kosmetichka.backend.dtos.responses.ProductResponse;
 import com.kosmetichka.backend.services.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
@@ -32,7 +33,7 @@ public class ProductController {
             @RequestParam(required = false)UUID brandId,
             @RequestParam(required = false)BigDecimal minPrice,
             @RequestParam(required = false)BigDecimal maxPrice,
-            @PageableDefault(size = 20) @SortDefault(sort = "name")Pageable pageable
+            @ParameterObject @PageableDefault(size = 20) @SortDefault(sort = "name")Pageable pageable
     ) {
         ProductFilterDto f = ProductFilterDto.builder()
                 .search(search)

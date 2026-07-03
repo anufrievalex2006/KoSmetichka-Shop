@@ -56,7 +56,7 @@ public class AuthService {
                 .build();
     }
     public AuthResponse refresh(String refreshToken) {
-        if (!service.isTokenValid(refreshToken))
+        if (!service.isTokenValid(refreshToken) || !service.isTokenOfType(refreshToken, "refresh"))
             throw new BadRequestException("Некорректный refresh-токен");
 
         String email = service.extractEmail(refreshToken);
