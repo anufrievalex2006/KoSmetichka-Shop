@@ -28,7 +28,7 @@ const news = [
 export const Main = () => {
     const nav = useRouter();
     return (
-        <Stack gap={0}>
+        <Stack flex={1} gap={0}>
             <Stack classNames={{root: styles.hero}} gap="md">
                 <Badge classNames={{root: styles.heroBadge}}>Новая коллекция</Badge>
                 <Title order={1} classNames={{root: styles.heroTitle}}>Красота начинается здесь</Title>

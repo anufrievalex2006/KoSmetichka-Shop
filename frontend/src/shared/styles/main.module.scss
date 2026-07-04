@@ -3,6 +3,8 @@
 @use "@/shared/styles/fonts" as *;
 
 .container {
+    display: flex;
+    flex-direction: column;
     width: 100vw;
     min-height: 100vh;
     background-color: $bg-primary;

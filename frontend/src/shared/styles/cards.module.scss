@@ -1,0 +1,100 @@
+@use "@/shared/styles/vars" as *;
+@use "@/shared/styles/mixins" as *;
+@use "@/shared/styles/fonts" as *;
+
+.container {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    min-height: 100vh;
+    background-color: $bg-primary;
+    color: $text-primary;
+}
+
+.pageTitle {
+    @include h1;
+    @include mobile {
+        @include h1-mobile;
+    }
+}
+
+.link {
+    text-decoration: none;
+}
+
+.card {
+    background-color: $bg-card;
+    border: 1px solid $border;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+
+    &:hover {
+        box-shadow: 0 6px 20px $shadow;
+        transform: translateY(-4px);
+    }
+}
+
+.cardImg, .cardImgPlaceholder {
+    width: 100%;
+    aspect-ratio: 16/9;
+    border-radius: 8px;
+    margin-bottom: 12px;
+}
+.cardImg {
+    background-size: cover;
+    background-position: center;
+}
+.cardImgPlaceholder {
+    background-color: $color-100;
+}
+
+.badgeNews {
+    background-color: $bg-info;
+    color: $text-info;
+    width: fit-content;
+    margin-bottom: 8px;
+}
+
+.badgePromo {
+    background-color: $bg-danger;
+    color: $text-danger;
+    width: fit-content;
+    margin-bottom: 8px;
+}
+
+.cardTitle {
+    @include h4;
+    @include mobile {
+        @include h4-mobile;
+    }
+    color: $text-primary;
+    margin-bottom: 6px;
+}
+
+.cardDescription {
+    @include p2;
+    @include mobile {
+        @include p2-mobile;
+    }
+    color: $text-secondary;
+    flex: 1;
+}
+
+.cardDate {
+    @include p2;
+    @include mobile {
+        @include p2-mobile;
+    }
+    color: $text-muted;
+    margin-top: 12px;
+}
+
+.editedMark {
+    margin-left: 8px;
+    @include p2;
+    @include mobile {
+        @include p2-mobile;
+    }
+}
