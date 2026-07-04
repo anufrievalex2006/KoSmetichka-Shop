@@ -1,0 +1,92 @@
+@use "@/shared/styles/fonts" as *;
+@use "@/shared/styles/mixins" as *;
+@use "@/shared/styles/vars" as *;
+
+.footer {
+    background-color: $color-950;
+    padding: 48px 32px 24px;
+    @include mobile {
+        padding: 32px 16px 16px;
+    }
+}
+
+.grid {
+    margin-bottom: 32px;
+}
+
+.shopName {
+    @include h3;
+    @include mobile {
+        @include h3-mobile;
+    }
+    color: $text-light;
+    font-weight: 700;
+
+    span {
+        color: $color-400;
+    }
+}
+
+.description {
+    @include p2;
+    @include mobile {
+        @include p2-mobile;
+    }
+    color: $color-200;
+}
+
+.columnTitle {
+    @include p1;
+    @include mobile {
+        @include p1-mobile;
+    }
+    color: $text-light;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.link {
+    @include p2;
+    @include mobile {
+        @include p2-mobile;
+    }
+    color: $color-200;
+    text-decoration: none;
+    transition: color 0.2s ease;
+
+    &:hover {
+        color: $color-400;
+    }
+}
+
+.address {
+    @include p2;
+    @include mobile {
+        @include p2-mobile;
+    }
+    color: $color-200;
+}
+
+.contactItem {
+    color: $color-300;
+}
+
+.contactValue {
+    @include p2;
+    @include mobile {
+        @include p2-mobile;
+    }
+    color: $color-200;
+}
+
+.copyright {
+    @include p2;
+    @include mobile {
+        @include p2-mobile;
+    }
+    color: $color-400;
+    text-align: center;
+    border-top: 1px solid $color-900;
+    padding-top: 16px;
+}
