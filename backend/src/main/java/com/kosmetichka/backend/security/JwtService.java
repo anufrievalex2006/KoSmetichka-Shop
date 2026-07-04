@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
+import java.time.Duration;
 import java.util.Date;
 
 @Service
@@ -38,6 +39,16 @@ public class JwtService {
     public String generateRefreshToken(UserPrincipal pr) {
         return buildToken(pr.getUsername(), refreshExpiration, "refresh");
     }
+    public String generateRefreshToken(UserPrincipal pr, Duration ttl, boolean rememberMe) {
+        return Jwts.builder()
+                .subject(pr.getUsername())
+                .claim("type", "refresh")
+                .claim("rememberMe", rememberMe)
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + ttl.toMillis()))
+                .signWith(getKey())
+                .compact();
+    }
     public boolean isTokenOfType(String token, String type) {
         try {
             String t = Jwts.parser()
@@ -59,6 +70,15 @@ public class JwtService {
                 .parseSignedClaims(token)
                 .getPayload()
                 .getSubject();
+    }
+    public boolean extractRememberMe(String token) {
+        Boolean x = Jwts.parser()
+                .verifyWith(getKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .get("rememberMe", Boolean.class);
+        return Boolean.TRUE.equals(x);
     }
     public boolean isTokenValid(String token) {
         try {

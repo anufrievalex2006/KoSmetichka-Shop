@@ -9,10 +9,9 @@ import com.kosmetichka.backend.services.AuthService;
 import com.kosmetichka.backend.services.PasswordResetService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +24,7 @@ public class AuthController {
     private final AuthService service;
     private final PasswordResetService resetService;
 
-    public record RefreshRequest(String refreshToken) {}
+    public record RefreshRequest(@NotBlank String refreshToken) {}
 
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@Valid  @RequestBody RegisterDto req, HttpServletResponse res) {
@@ -44,7 +43,6 @@ public class AuthController {
     }
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(HttpServletResponse res) {
-        clearAuthCookies(res);
         return ResponseEntity.noContent().build();
     }
     @PostMapping("/password/forgot")
@@ -56,12 +54,5 @@ public class AuthController {
     public ResponseEntity<Void> reset(@Valid @RequestBody ResetPasswordDto req) {
         resetService.resetPassword(req);
         return ResponseEntity.noContent().build();
-    }
-
-    private void clearAuthCookies(HttpServletResponse res) {
-        ResponseCookie access = ResponseCookie.from("accessToken", "").path("/").maxAge(0).build();
-        ResponseCookie refresh = ResponseCookie.from("refreshToken", "").path("/api/auth").maxAge(0).build();
-        res.addHeader(HttpHeaders.SET_COOKIE, access.toString());
-        res.addHeader(HttpHeaders.SET_COOKIE, refresh.toString());
     }
 }

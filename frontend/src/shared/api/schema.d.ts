@@ -663,6 +663,13 @@ export interface components {
             phone: string;
             password: string;
         };
+        AuthResponse: {
+            accessToken: string;
+            refreshToken: string;
+        };
+        RefreshRequest: {
+            refreshToken: string;
+        };
         ResetPasswordDto: {
             token: string;
             newPassword: string;
@@ -675,6 +682,7 @@ export interface components {
             /** Format: email */
             email: string;
             password: string;
+            rememberMe?: boolean;
         };
         AttributeCreateDto: {
             name: string;
@@ -1125,7 +1133,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "*/*": components["schemas"]["AuthResponse"];
+                };
             };
         };
     };
@@ -1134,18 +1144,22 @@ export interface operations {
             query?: never;
             header?: never;
             path?: never;
-            cookie: {
-                refreshToken: string;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RefreshRequest"];
             };
         };
-        requestBody?: never;
         responses: {
             /** @description OK */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "*/*": components["schemas"]["AuthResponse"];
+                };
             };
         };
     };
@@ -1229,7 +1243,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "*/*": components["schemas"]["AuthResponse"];
+                };
             };
         };
     };

@@ -18,6 +18,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -49,10 +51,14 @@ public class AuthService {
                 new UsernamePasswordAuthenticationToken(req.getEmail(), req.getPassword())
         );
         User u = repo.findByEmail(req.getEmail()).orElseThrow();
+        boolean rememberMe = Boolean.TRUE.equals(req.getRememberMe());
+        Duration ttl = rememberMe
+                ? Duration.ofDays(30)
+                : Duration.ofHours(12);
         UserPrincipal pr = new UserPrincipal(u);
         return AuthResponse.builder()
                 .accessToken(service.generateAccessToken(pr))
-                .refreshToken(service.generateRefreshToken(pr))
+                .refreshToken(service.generateRefreshToken(pr, ttl, rememberMe))
                 .build();
     }
     public AuthResponse refresh(String refreshToken) {
@@ -60,11 +66,13 @@ public class AuthService {
             throw new BadRequestException("Некорректный refresh-токен");
 
         String email = service.extractEmail(refreshToken);
+        boolean rememberMe = service.extractRememberMe(refreshToken);
         User u = repo.findByEmail(email).orElseThrow();
         UserPrincipal pr = new UserPrincipal(u);
+        Duration ttl = rememberMe ? Duration.ofDays(30) : Duration.ofHours(12);
         return AuthResponse.builder()
                 .accessToken(service.generateAccessToken(pr))
-                .refreshToken(service.generateRefreshToken(pr))
+                .refreshToken(service.generateRefreshToken(pr, ttl, rememberMe))
                 .build();
     }
 }
