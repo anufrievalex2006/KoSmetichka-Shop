@@ -1,12 +1,13 @@
 import { ContentCardRepo } from "@/data/repos/ContentCardRepo"
 import { useContentCardsList } from "@/features/contentCard";
-import { Badge, Box, Card, Center, Group, Loader, SimpleGrid, Stack, Text, Title, Tooltip } from "@mantine/core"
+import { Group, Loader, SimpleGrid, Stack, Text, Title } from "@mantine/core"
 import styles from "@/shared/styles/cards.module.scss";
-import Link from "next/link";
+import { NewsCard } from "./NewsCard";
+import { ContentCardDto } from "@/domain";
 
 const repo = new ContentCardRepo();
 
-const news = [
+const news: ContentCardDto[] = [
     {id: "1", title: "Тест новости", description: "Тест описания", type: "NEWS", photoUrl: null, createdAt: "2026-04-21T13:25:00.426", updatedAt: "2026-06-29T18:42:59.382"}
 ]
 
@@ -41,30 +42,7 @@ export const NewsMain = () => {
             ) : (
                 <SimpleGrid cols={{base: 1, sm: 2, md: 3}} spacing="md">
                     {news.map(c => (
-                        <Link key={c.id} href={`/news/${c.id}`} className={styles.link}>
-                            <Card classNames={{root: styles.card}} padding="md">
-                                {c.photoUrl ? (
-                                    <Box className={styles.cardImg} style={{backgroundImage: `url(${c.photoUrl})`}}></Box>
-                                ) : (
-                                    <Box className={styles.cardImgPlaceholder}></Box>
-                                )}
-                                <Badge classNames={{root: styles.badgeNews}}>Новость</Badge>
-                                <Text classNames={{root: styles.cardTitle}}>{c.title}</Text>
-                                {c.description && (
-                                    <Text classNames={{root: styles.cardDescription}} lineClamp={2}>
-                                        {c.description}
-                                    </Text>
-                                )}
-                                <Text classNames={{root: styles.cardDate}}>
-                                    <Text component="span">{formatDateTime(c.createdAt)}</Text>
-                                    {c.createdAt !== c.updatedAt && (
-                                        <Tooltip label={`Изменено ${formatDateTime(c.updatedAt)}`} withArrow>
-                                            <Text component="span" classNames={{root: styles.editedMark}}>(изм.)</Text>
-                                        </Tooltip>
-                                    )}
-                                </Text>
-                            </Card>
-                        </Link>
+                        <NewsCard key={c.id} news={c}></NewsCard>
                     ))}
                 </SimpleGrid>
             )}
