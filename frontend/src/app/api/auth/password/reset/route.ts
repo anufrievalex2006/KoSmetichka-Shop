@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(req: NextRequest) {
     try {
         const body = await req.json();
-        const res = await fetch(`${API_URL}/api/auth/password/reset`, {
+        const res = await fetch(`${API_URL}/auth/password/reset`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

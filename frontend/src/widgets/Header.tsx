@@ -4,6 +4,9 @@ import { IconMenu2, IconSearch, IconShoppingCart, IconUser } from "@tabler/icons
 import { ActionIcon, Drawer, Group, Stack, TextInput, Title } from "@mantine/core";
 import Link from "next/link";
 import { useState } from "react";
+import { UserRepo } from "@/data/repos/UserRepo";
+import { useAuthCheck } from "@/features/auth";
+import { useRouter } from "next/navigation";
 
 const links = [
     { label: "Главная", href: "/" },
@@ -13,8 +16,13 @@ const links = [
     { label: "Контакты", href: "/contacts" },
 ]
 
+const repo = new UserRepo();
+
 export const Header = () => {
+    const nav = useRouter();
+    const {isAuthorized} = useAuthCheck(repo);
     const [open, setOpen] = useState(false);
+    const onProfileClick = () => nav.push(isAuthorized ? "/profile" : "/login");
     return (
         <header className={styles.header}>
             <Group classNames={{root: styles.headerTop}}>
@@ -23,16 +31,18 @@ export const Header = () => {
                 }} onClick={() => setOpen(true)} aria-label="Открыть меню">
                     <IconMenu2 size={24}></IconMenu2>
                 </ActionIcon>
-                <Title order={1} classNames={{root: styles.shopName}}>Ко<span>S</span>метичка</Title>
+                <Title order={1} onClick={
+                    () => nav.push("/")
+                } classNames={{root: styles.shopName}}>Ко<span>S</span>метичка</Title>
                 <TextInput placeholder="Найти товар по названию/артикулу" classNames={{
                     root: styles.search,
                     input: styles.searchInput
                 }} leftSection={<IconSearch size={18}></IconSearch>}></TextInput>
                 <Group gap="sm" wrap="nowrap">
-                    <ActionIcon variant="subtle" size="xl" aria-label="Корзина">
+                    <ActionIcon variant="subtle" size="xl">
                         <IconShoppingCart size={22}></IconShoppingCart>
                     </ActionIcon>
-                    <ActionIcon variant="subtle" size="xl" aria-label="Профиль">
+                    <ActionIcon variant="subtle" size="xl" onClick={onProfileClick}>
                         <IconUser size={22}></IconUser>
                     </ActionIcon>
                 </Group>

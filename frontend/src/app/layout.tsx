@@ -6,6 +6,7 @@ import "@mantine/notifications/styles.css";
 import "./globals.css";
 import { MantineProvider } from "@mantine/core";
 import { QueryProvider } from "@/shared/providers/QueryProvider";
+import { Notifications } from "@mantine/notifications";
 
 const nunito = Nunito({
     subsets: ['cyrillic', 'latin'],
@@ -29,6 +30,7 @@ export default function RootLayout({
             <body>
                 <QueryProvider>
                     <MantineProvider>
+                        <Notifications></Notifications>
                         {children}
                     </MantineProvider>
                 </QueryProvider>

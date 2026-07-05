@@ -11,7 +11,7 @@ interface RegisterResponse {
 export async function POST(req: NextRequest) {
     try {
         const body = await req.json();
-        const res = await fetch(`${API_URL}/api/auth/register`, {
+        const res = await fetch(`${API_URL}/auth/register`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

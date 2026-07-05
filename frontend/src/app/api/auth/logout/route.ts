@@ -9,7 +9,7 @@ export async function POST() {
 
     if (atoken) {
         try {
-            await fetch(`${API_URL}/api/auth/logout`, {
+            await fetch(`${API_URL}/auth/logout`, {
                 method: 'POST',
                 headers: { Authorization: `Bearer ${atoken}` },
             });

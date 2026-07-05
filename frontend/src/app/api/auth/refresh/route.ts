@@ -17,7 +17,7 @@ export async function POST() {
 
     const rememberMe = store.get('remember-me')?.value === '1';
     try {
-        const res = await fetch(`${API_URL}/api/auth/refresh`, {
+        const res = await fetch(`${API_URL}/auth/refresh`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ refreshToken: rtoken }),

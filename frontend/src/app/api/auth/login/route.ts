@@ -17,7 +17,7 @@ interface LoginResponse {
 export async function POST(req: NextRequest) {
     try {
         const body = (await req.json()) as LoginRequest;
-        const res = await fetch(`${API_URL}/api/auth/login`, {
+        const res = await fetch(`${API_URL}/auth/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(body),
@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
         const data = (await res.json()) as LoginResponse;
         if (!res.ok || !data.accessToken || !data.refreshToken) {
             return NextResponse.json(
-                data || { message: 'Неверный email или пароль' },
+                data.message ? data : { message: 'Неверный email или пароль' },
                 { status: res.ok ? 400 : res.status }
             );
         }
