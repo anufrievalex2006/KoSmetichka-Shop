@@ -19,25 +19,24 @@ public class ShopService {
     private final ShopRepo repo;
     private final ShopMapper mapper;
 
-    public List<ShopResponse> get() {
-        return repo.findAll().stream().map(mapper::toResponse).toList();
+    public ShopResponse get() {
+        Shop s = getShop();
+        return mapper.toResponse(s);
     }
-    public ShopResponse getById(UUID id) {
-        return mapper.toResponse(repo.findById(id)
-                .orElseThrow(() -> new NotFoundException("Магазин не найден")));
-    }
-    public ShopResponse create(ShopCreateDto req) {
-        return mapper.toResponse(repo.save(mapper.toEntity(req)));
-    }
-    public ShopResponse update(UUID id, ShopUpdateDto req) {
-        Shop s = repo.findById(id)
-                .orElseThrow(() -> new NotFoundException("Магазин не найден"));
+    public ShopResponse update(ShopUpdateDto req) {
+        Shop s = getShop();
         mapper.updateEntity(req, s);
         return mapper.toResponse(repo.save(s));
     }
-    public void delete(UUID id) {
-        if (!repo.existsById(id))
-            throw new NotFoundException("Магазин не найден");
-        repo.deleteById(id);
+    private Shop getShop() {
+        List<Shop> shops = repo.findAll();
+        if (shops.isEmpty()) {
+            Shop s = Shop.builder()
+                    .name("КоSметичка")
+                    .address("г. Томск, пер. Карповский, д. 12")
+                    .build();
+            return repo.save(s);
+        }
+        return shops.getFirst();
     }
 }

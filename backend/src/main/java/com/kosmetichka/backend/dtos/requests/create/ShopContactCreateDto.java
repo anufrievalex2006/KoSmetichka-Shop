@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.util.UUID;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -16,4 +18,6 @@ public class ShopContactCreateDto {
     private ContactType type;
     @NotBlank(message = "Введите значение контакта")
     private String value;
+    @NotNull
+    private UUID shopId;
 }

@@ -41,7 +41,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.GET,
                                 "/api/products/**", "/api/categories/**", "/api/attributes/**",
-                                "/api/brands/**", "/api/content/**", "/api/shops/**"
+                                "/api/brands/**", "/api/content/**", "/api/shop", "/api/shop/**"
                         ).permitAll()
 
                         .requestMatchers("/api/auth/**").permitAll()
@@ -53,11 +53,11 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/files/**").hasAnyRole("ADMIN", "CREATOR")
 
                         .requestMatchers(HttpMethod.POST, "/api/products/**", "/api/categories/**",
-                                "/api/attributes/**", "/api/brands/**", "/api/shops/**").hasAnyRole("ADMIN", "CREATOR")
+                                "/api/attributes/**", "/api/brands/**", "/api/shop/**").hasAnyRole("ADMIN", "CREATOR")
                         .requestMatchers(HttpMethod.PATCH, "/api/products/**", "/api/categories/**",
-                                "/api/attributes/**", "/api/brands/**", "/api/shops/**").hasAnyRole("ADMIN", "CREATOR")
+                                "/api/attributes/**", "/api/brands/**", "/api/shop", "/api/shop/**").hasAnyRole("ADMIN", "CREATOR")
                         .requestMatchers(HttpMethod.DELETE, "/api/products/**", "/api/categories/**",
-                                "/api/attributes/**", "/api/brands/**", "/api/shops/**").hasAnyRole("ADMIN", "CREATOR")
+                                "/api/attributes/**", "/api/brands/**", "/api/shop/**").hasAnyRole("ADMIN", "CREATOR")
 
                         .requestMatchers(HttpMethod.POST, "/api/content/**").hasAnyRole("ADMIN", "CREATOR")
                         .requestMatchers(HttpMethod.PATCH, "/api/content/**").hasAnyRole("ADMIN", "CREATOR")

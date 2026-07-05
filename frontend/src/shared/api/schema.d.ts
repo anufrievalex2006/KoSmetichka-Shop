@@ -4,7 +4,7 @@
  */
 
 export interface paths {
-    "/api/shops": {
+    "/api/shop/contacts": {
         parameters: {
             query?: never;
             header?: never;
@@ -292,7 +292,23 @@ export interface paths {
         patch: operations["changePassword"];
         trace?: never;
     };
-    "/api/shops/{id}": {
+    "/api/shop": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["get_4"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["update"];
+        trace?: never;
+    };
+    "/api/shop/contacts/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -305,7 +321,7 @@ export interface paths {
         delete: operations["delete"];
         options?: never;
         head?: never;
-        patch: operations["update"];
+        patch: operations["update_1"];
         trace?: never;
     };
     "/api/products/{id}": {
@@ -321,7 +337,7 @@ export interface paths {
         delete: operations["delete_1"];
         options?: never;
         head?: never;
-        patch: operations["update_1"];
+        patch: operations["update_2"];
         trace?: never;
     };
     "/api/content/{id}": {
@@ -337,7 +353,7 @@ export interface paths {
         delete: operations["delete_2"];
         options?: never;
         head?: never;
-        patch: operations["update_2"];
+        patch: operations["update_3"];
         trace?: never;
     };
     "/api/categories/{id}": {
@@ -353,7 +369,7 @@ export interface paths {
         delete: operations["delete_3"];
         options?: never;
         head?: never;
-        patch: operations["update_3"];
+        patch: operations["update_4"];
         trace?: never;
     };
     "/api/cart/positions/{id}": {
@@ -385,7 +401,7 @@ export interface paths {
         delete: operations["delete_4"];
         options?: never;
         head?: never;
-        patch: operations["update_4"];
+        patch: operations["update_5"];
         trace?: never;
     };
     "/api/attributes/{id}": {
@@ -401,7 +417,7 @@ export interface paths {
         delete: operations["delete_5"];
         options?: never;
         head?: never;
-        patch: operations["update_5"];
+        patch: operations["update_6"];
         trace?: never;
     };
     "/api/appeals/{id}/status": {
@@ -525,12 +541,8 @@ export interface components {
             /** @enum {string} */
             type: "PHONE" | "EMAIL" | "SOCIAL_MEDIA";
             value: string;
-        };
-        ShopCreateDto: {
-            name: string;
-            description?: string;
-            address: string;
-            contacts?: components["schemas"]["ShopContactCreateDto"][];
+            /** Format: uuid */
+            shopId: string;
         };
         ShopContactResponse: {
             /** Format: uuid */
@@ -539,14 +551,6 @@ export interface components {
             /** @enum {string} */
             type: "PHONE" | "EMAIL" | "SOCIAL_MEDIA";
             value: string;
-        };
-        ShopResponse: {
-            /** Format: uuid */
-            id: string;
-            name: string;
-            description?: string | null;
-            address: string;
-            contacts: components["schemas"]["ShopContactResponse"][];
         };
         AttributeValueCreateDto: {
             /** Format: uuid */
@@ -759,6 +763,20 @@ export interface components {
             address?: string;
             contacts?: components["schemas"]["ShopContactCreateDto"][];
         };
+        ShopResponse: {
+            /** Format: uuid */
+            id: string;
+            name: string;
+            description?: string | null;
+            address: string;
+            contacts: components["schemas"]["ShopContactResponse"][];
+        };
+        ShopContactUpdateDto: {
+            label?: string;
+            /** @enum {string} */
+            type?: "PHONE" | "EMAIL" | "SOCIAL_MEDIA";
+            value?: string;
+        };
         ProductUpdateDto: {
             name?: string;
             barCodeNumber?: string;
@@ -843,7 +861,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ShopResponse"][];
+                    "*/*": components["schemas"]["ShopContactResponse"][];
                 };
             };
         };
@@ -857,7 +875,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["ShopCreateDto"];
+                "application/json": components["schemas"]["ShopContactCreateDto"];
             };
         };
         responses: {
@@ -867,7 +885,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ShopResponse"];
+                    "*/*": components["schemas"]["ShopContactResponse"];
                 };
             };
         };
@@ -1387,6 +1405,50 @@ export interface operations {
             };
         };
     };
+    get_4: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ShopResponse"];
+                };
+            };
+        };
+    };
+    update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ShopUpdateDto"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ShopResponse"];
+                };
+            };
+        };
+    };
     getById: {
         parameters: {
             query?: never;
@@ -1404,7 +1466,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ShopResponse"];
+                    "*/*": components["schemas"]["ShopContactResponse"];
                 };
             };
         };
@@ -1429,7 +1491,7 @@ export interface operations {
             };
         };
     };
-    update: {
+    update_1: {
         parameters: {
             query?: never;
             header?: never;
@@ -1440,7 +1502,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["ShopUpdateDto"];
+                "application/json": components["schemas"]["ShopContactUpdateDto"];
             };
         };
         responses: {
@@ -1450,7 +1512,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ShopResponse"];
+                    "*/*": components["schemas"]["ShopContactResponse"];
                 };
             };
         };
@@ -1497,7 +1559,7 @@ export interface operations {
             };
         };
     };
-    update_1: {
+    update_2: {
         parameters: {
             query?: never;
             header?: never;
@@ -1565,7 +1627,7 @@ export interface operations {
             };
         };
     };
-    update_2: {
+    update_3: {
         parameters: {
             query?: never;
             header?: never;
@@ -1633,7 +1695,7 @@ export interface operations {
             };
         };
     };
-    update_3: {
+    update_4: {
         parameters: {
             query?: never;
             header?: never;
@@ -1749,7 +1811,7 @@ export interface operations {
             };
         };
     };
-    update_4: {
+    update_5: {
         parameters: {
             query?: never;
             header?: never;
@@ -1795,7 +1857,7 @@ export interface operations {
             };
         };
     };
-    update_5: {
+    update_6: {
         parameters: {
             query?: never;
             header?: never;
