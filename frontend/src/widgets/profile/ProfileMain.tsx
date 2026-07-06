@@ -30,7 +30,7 @@ export const ProfileMain = () => {
                 <Group align="flex-start" classNames={{root: styles.mainGroup}}>
                     <div className={styles.avatarWrap}>
                         <div className={styles.avatar}>
-                            <Image alt={`Profile ${profile.name}`} className={styles.profilePic} fill sizes="160px" src={profile.avatarUrl || noImage}></Image>
+                            <Image alt={`Profile ${profile.name}`} className={styles.profilePic} fill src={profile.avatarUrl || noImage}></Image>
                         </div>
                         <ActionIcon classNames={{root: styles.avatarEditBtn}} radius="xl" size="xl" onClick={openModal}>
                             <IconCamera size={22}></IconCamera>

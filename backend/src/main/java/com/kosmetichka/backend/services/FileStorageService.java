@@ -22,6 +22,8 @@ public class FileStorageService {
     private String bucket;
     @Value("${minio.url}")
     private String url;
+    @Value("${minio.public-url}")
+    private String publicUrl;
 
     private static final List<String> ALLOWED_TYPES = List.of("image/jpeg", "image/png", "image/webp");
     private String getExtension(String filename) {
@@ -48,7 +50,7 @@ public class FileStorageService {
         } catch (Exception e) {
             throw new RuntimeException("Не удалось загрузить файл", e);
         }
-        return url + "/" + bucket + "/" + fileName;
+        return publicUrl + "/" + bucket + "/" + fileName;
     }
     public void delete(String fileUrl) {
         if (fileUrl == null || fileUrl.isBlank())

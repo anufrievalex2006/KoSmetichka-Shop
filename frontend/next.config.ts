@@ -6,11 +6,13 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "http",
-        hostname: "minio",
+        hostname: "localhost",
         port: "9000",
         pathname: "/kosmetichka/**"
       }
-    ]
+    ],
+    dangerouslyAllowLocalIP: true,
+    qualities: [75, 90, 100],
   }
 };
 
