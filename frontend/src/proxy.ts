@@ -16,3 +16,7 @@ export default function proxy(req: NextRequest) {
 
     return NextResponse.next();
 }
+
+export const config = {
+    matcher: ["/login", "/register", "/profile/:path*"]
+};

@@ -292,6 +292,22 @@ export interface paths {
         patch: operations["changePassword"];
         trace?: never;
     };
+    "/api/users/me/avatar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["deleteAvatar"];
+        options?: never;
+        head?: never;
+        patch: operations["updateAvatar"];
+        trace?: never;
+    };
     "/api/shop": {
         parameters: {
             query?: never;
@@ -721,6 +737,7 @@ export interface components {
             name: string;
             email: string;
             phone?: string | null;
+            avatarUrl?: string | null;
             /** @enum {string} */
             role: "ADMIN" | "CREATOR" | "CLIENT" | "SUPPLIER";
             /** Format: date-time */
@@ -1402,6 +1419,53 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    deleteAvatar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["UserResponse"];
+                };
+            };
+        };
+    };
+    updateAvatar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "multipart/form-data": {
+                    /** Format: binary */
+                    file: string;
+                };
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["UserResponse"];
+                };
             };
         };
     };

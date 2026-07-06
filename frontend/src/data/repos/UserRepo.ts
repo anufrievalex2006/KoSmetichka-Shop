@@ -10,6 +10,16 @@ export class UserRepo implements IUserRepo {
         const res = await api.patch<ProfileDto>("/users/me", req);
         return res.data;
     }
+    async updateAvatar(file: File): Promise<ProfileDto> {
+        const data = new FormData();
+        data.append("file", file);
+        const res = await api.patch<ProfileDto>("/users/me/avatar", data, {
+            headers: {
+                "Content-Type": "multipart/form-data"
+            }
+        });
+        return res.data;
+    }
     async changePassword(req: PasswordUpdateDto): Promise<void> {
         await api.patch("/users/me/password", req);
     }

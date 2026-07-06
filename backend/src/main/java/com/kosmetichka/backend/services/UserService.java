@@ -13,6 +13,7 @@ import com.kosmetichka.backend.utilities.mappers.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -24,6 +25,7 @@ public class UserService {
     private final UserRepo repo;
     private final UserMapper mapper;
     private final PasswordEncoder encoder;
+    private final FileStorageService service;
 
     public List<StatisticsResponse> getStatistics() {
         return repo.countRegistrationsByDay().stream()
@@ -38,6 +40,17 @@ public class UserService {
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
         mapper.updateEntity(req, u);
         return mapper.toResponse(repo.save(u));
+    }
+    public UserResponse updateAvatar(UserPrincipal pr, MultipartFile file) {
+        User u = repo.findById(pr.getId())
+                .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
+
+        String oldUrl = u.getAvatarUrl(), newUrl = service.upload(file);
+        u.setAvatarUrl(newUrl);
+        User saved = repo.save(u);
+
+        service.delete(oldUrl);
+        return mapper.toResponse(saved);
     }
     public void changePassword(UserPrincipal pr, PasswordUpdateDto req) {
         User u = repo.findById(pr.getId())
@@ -54,5 +67,13 @@ public class UserService {
         if (!repo.existsById(id))
             throw new NotFoundException("Пользователь не найден");
         repo.deleteById(id);
+    }
+    public UserResponse deleteAvatar(UserPrincipal pr) {
+        User u = repo.findById(pr.getId())
+                .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
+
+        service.delete(u.getAvatarUrl());
+        u.setAvatarUrl(null);
+        return mapper.toResponse(repo.save(u));
     }
 }

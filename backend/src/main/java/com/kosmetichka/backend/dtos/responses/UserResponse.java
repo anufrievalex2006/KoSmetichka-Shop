@@ -21,6 +21,8 @@ public class UserResponse {
     private String email;
     @Schema(nullable = true)
     private String phone;
+    @Schema(nullable = true)
+    private String avatarUrl;
     @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
     private UserRole role;
     @Schema(requiredMode = Schema.RequiredMode.REQUIRED)

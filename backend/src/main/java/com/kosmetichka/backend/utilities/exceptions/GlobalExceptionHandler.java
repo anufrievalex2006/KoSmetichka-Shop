@@ -8,6 +8,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -43,6 +45,11 @@ public class GlobalExceptionHandler {
                 "message", first,
                 "errors", errors
         ));
+    }
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<Map<String, String>> handleMaxUploadSize(MaxUploadSizeExceededException e) {
+        return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE)
+                .body(Map.of("message", "Размер файла не должен превышать 5 МБ"));
     }
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, String>> handleGeneral(Exception e) {

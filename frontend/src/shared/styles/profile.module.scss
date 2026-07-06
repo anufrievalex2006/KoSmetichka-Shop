@@ -1,0 +1,109 @@
+@use "@/shared/styles/vars" as *;
+@use "@/shared/styles/mixins" as *;
+@use "@/shared/styles/fonts" as *;
+
+.container {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    min-height: 100vh;
+    background-color: $bg-primary;
+    color: $text-primary;
+}
+
+.pageTitle {
+    @include h1;
+    @include mobile {
+        @include h1-mobile;
+    }
+}
+
+.mainGroup {
+    gap: 45px;
+    @include laptop {
+        gap: 30px;
+    }
+    @include tablet {
+        gap: 16px;
+    }
+    @include mobile {
+        gap: 16px;
+    }
+}
+
+.avatarWrap {
+    position: relative;
+    width: 320px;
+    height: 300px;
+    @include tablet {
+        min-width: 250px;
+        width: 21%;
+        height: 230px;
+    }
+    @include mobile {
+        width: 100%;
+        height: 280px;
+    }
+    flex-shrink: 0;
+}
+
+.avatar {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 1px solid $border;
+    box-shadow: 0 5px 20px $shadow;
+}
+
+.profilePic {
+    background-color: $color-50;
+    object-fit: cover;
+}
+
+.userInfoDiv {
+    border-radius: 8px;
+    border: 1px solid $border;
+    box-shadow: 0 4px 12px $shadow;
+    background-color: $bg-card;
+    padding: 20px;
+    gap: 12px;
+}
+
+.h3 {
+    @include h3;
+    @include mobile {
+        @include h3-mobile;
+    }
+    font-weight: 600;
+}
+
+.entryTitle {
+    @include p1;
+    @include mobile {
+        @include p1-mobile;
+    }
+}
+.entryValue {
+    @include p2;
+    @include mobile {
+        @include p2-mobile;
+    }
+}
+
+.avatarEditBtn {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+}
+
+.avatarPreviewWrap {
+    position: relative;
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 1px solid $border;
+}
