@@ -36,3 +36,9 @@ build/
 application-local.properties
 application-docker.properties
 .env
+
+# docs
+*.md.repomix
+backend.md
+frontend.md
+DOCS_FOR_AI.md
