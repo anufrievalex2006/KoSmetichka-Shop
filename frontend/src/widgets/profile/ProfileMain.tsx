@@ -1,20 +1,29 @@
 import { UserRepo } from "@/data/repos/UserRepo";
 import { useProfile } from "@/features/profile";
 import styles from "@/shared/styles/profile.module.scss";
-import { ActionIcon, Divider, Group, Loader, Stack, Text, Title } from "@mantine/core";
+import { ActionIcon, Button, Divider, Group, Loader, Stack, Text, Title } from "@mantine/core";
 import Image from "next/image";
 import noImage from "@/assets/no-image.png";
-import { IconCamera, IconPencil } from "@tabler/icons-react";
+import { IconCamera, IconLogout, IconPassword, IconPasswordUser, IconPencil } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
 import { UpdateAvatarModal } from "./UpdateAvatarModal";
+import { UpdateProfileModal } from "./UpdateProfileModal";
+import { useLogout } from "@/features/auth";
+import { AuthRepo } from "@/data/repos/AuthRepo";
 
+const aRepo = new AuthRepo();
 const repo = new UserRepo();
 
 export const ProfileMain = () => {
     const {profile, isLoading} = useProfile(repo);
+    const logout = useLogout(aRepo);
     const [modalOpened, {
         open: openModal,
         close: closeModal
+    }] = useDisclosure(false);
+    const [updProfileModalOpened, {
+        open: openUpdProfileModal,
+        close: closeUpdProfileModal
     }] = useDisclosure(false);
     return (
         <Stack flex={1} gap="lg" p="xl">
@@ -27,41 +36,52 @@ export const ProfileMain = () => {
             ) : !profile ? (
                 <Text c="red" fw={700} ta="center">Вы не авторизованы в системе</Text>
             ) : (
-                <Group align="flex-start" classNames={{root: styles.mainGroup}}>
-                    <div className={styles.avatarWrap}>
-                        <div className={styles.avatar}>
-                            <Image alt={`Profile ${profile.name}`} className={styles.profilePic} fill src={profile.avatarUrl || noImage}></Image>
-                        </div>
-                        <ActionIcon classNames={{root: styles.avatarEditBtn}} radius="xl" size="xl" onClick={openModal}>
-                            <IconCamera size={22}></IconCamera>
-                        </ActionIcon>
-                    </div>
-                    <Stack flex={1} classNames={{root: styles.userInfoDiv}}>
-                        <Group justify="space-between">
-                            <Title order={2} classNames={{root: styles.h3}}>Информация о пользователе</Title>
-                            <ActionIcon size="lg">
-                                <IconPencil size={22}></IconPencil>
+                <>
+                    <Group align="flex-start" classNames={{root: styles.mainGroup}}>
+                        <div className={styles.avatarWrap}>
+                            <div className={styles.avatar}>
+                                <Image alt={`Profile ${profile.name}`} className={styles.profilePic} fill src={profile.avatarUrl || noImage}></Image>
+                            </div>
+                            <ActionIcon classNames={{root: styles.avatarEditBtn}} radius="xl" size="xl" onClick={openModal}>
+                                <IconCamera size={22}></IconCamera>
                             </ActionIcon>
-                        </Group>
-                        <Stack gap={8}>
+                        </div>
+                        <Stack flex={1} classNames={{root: styles.userInfoDiv}}>
+                            <Group justify="space-between">
+                                <Title order={2} classNames={{root: styles.h3}}>Информация о пользователе</Title>
+                                <ActionIcon size="lg" onClick={openUpdProfileModal}>
+                                    <IconPencil size={22}></IconPencil>
+                                </ActionIcon>
+                            </Group>
                             <Stack gap={8}>
-                                <Text classNames={{root: styles.entryTitle}}>ФИО</Text>
-                                <Text classNames={{root: styles.entryValue}}>{profile.name}</Text>
-                            </Stack>
-                            <Divider></Divider>
-                            <Stack gap={8}>
-                                <Text classNames={{root: styles.entryTitle}}>Email</Text>
-                                <Text classNames={{root: styles.entryValue}}>{profile.email}</Text>
-                            </Stack>
-                            <Divider></Divider>
-                            <Stack gap={8}>
-                                <Text classNames={{root: styles.entryTitle}}>Номер телефона</Text>
-                                <Text classNames={{root: styles.entryValue}}>{profile.phone}</Text>
+                                <Stack gap={8}>
+                                    <Text classNames={{root: styles.entryTitle}}>ФИО</Text>
+                                    <Text classNames={{root: styles.entryValue}}>{profile.name}</Text>
+                                </Stack>
+                                <Divider></Divider>
+                                <Stack gap={8}>
+                                    <Text classNames={{root: styles.entryTitle}}>Email</Text>
+                                    <Text classNames={{root: styles.entryValue}}>{profile.email}</Text>
+                                </Stack>
+                                <Divider></Divider>
+                                <Stack gap={8}>
+                                    <Text classNames={{root: styles.entryTitle}}>Номер телефона</Text>
+                                    <Text classNames={{root: styles.entryValue}}>{profile.phone}</Text>
+                                </Stack>
                             </Stack>
                         </Stack>
-                    </Stack>
-                </Group>
+                    </Group>
+                    <Group gap="sm" justify="flex-end">
+                        <Button variant="outline" classNames={{root: styles.passBtn}} leftSection={
+                            <IconPasswordUser size={18}></IconPasswordUser>
+                        }>Сменить пароль</Button>
+                        <Button variant="outline" classNames={{root: styles.logoutBtn}} leftSection={
+                            <IconLogout size={18}></IconLogout>
+                        } onClick={() => logout.mutate()} loading={logout.isPending}>Выйти из системы</Button>
+                    </Group>
+                </>
             )}
+            <UpdateProfileModal opened={updProfileModalOpened} onClose={closeUpdProfileModal}></UpdateProfileModal>
             <UpdateAvatarModal opened={modalOpened} onClose={closeModal} currentAvatarUrl={profile?.avatarUrl}></UpdateAvatarModal>
         </Stack>
     )

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import javax.crypto.SecretKey;
 import java.time.Duration;
 import java.util.Date;
+import java.util.UUID;
 
 @Service
 public class JwtService {
@@ -34,14 +35,14 @@ public class JwtService {
     }
 
     public String generateAccessToken(UserPrincipal pr) {
-        return buildToken(pr.getUsername(), accessExpiration, "access");
+        return buildToken(pr.getId().toString(), accessExpiration, "access");
     }
     public String generateRefreshToken(UserPrincipal pr) {
-        return buildToken(pr.getUsername(), refreshExpiration, "refresh");
+        return buildToken(pr.getId().toString(), refreshExpiration, "refresh");
     }
     public String generateRefreshToken(UserPrincipal pr, Duration ttl, boolean rememberMe) {
         return Jwts.builder()
-                .subject(pr.getUsername())
+                .subject(pr.getId().toString())
                 .claim("type", "refresh")
                 .claim("rememberMe", rememberMe)
                 .issuedAt(new Date())
@@ -63,13 +64,14 @@ public class JwtService {
             return false;
         }
     }
-    public String extractEmail(String token) {
-        return Jwts.parser()
+    public UUID extractUserId(String token) {
+        String subj = Jwts.parser()
                 .verifyWith(getKey())
                 .build()
                 .parseSignedClaims(token)
                 .getPayload()
                 .getSubject();
+        return UUID.fromString(subj);
     }
     public boolean extractRememberMe(String token) {
         Boolean x = Jwts.parser()

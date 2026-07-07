@@ -107,3 +107,78 @@
     overflow: hidden;
     border: 1px solid $border;
 }
+
+.field {
+    position: relative;
+}
+.fieldInput {
+    height: 48px;
+    border: 1px solid $input-border;
+    padding: 8px 16px;
+    @include p1;
+    @include mobile {
+        @include p1-mobile;
+    }
+
+    &[data-error="true"] {
+        border: 1px solid $danger;
+        color: $danger;
+    }
+}
+.fieldInputLabel {
+    @include p2;
+    @include mobile {
+        @include p2-mobile;
+    }
+    z-index: 1;
+    position: absolute;
+    padding-inline: 4px;
+    top: -8px;
+    left: 15px;
+    background-color: $bg-card-secondary;
+}
+:global(.mantine-InputWrapper-root[data-error]) {
+    .fieldInputLabel {
+        color: $danger;
+    }
+}
+.fieldInputError {
+    color: $danger;
+    margin-left: 16px;
+}
+
+.submitBtn, .cancelBtn, .logoutBtn, .passBtn {
+    height: 50px;
+    padding: 15px 42px 15px 40px;
+    @include button;
+    @include mobile {
+        @include button-mobile;
+    }
+    transition: background-color 0.2s ease;
+}
+.submitBtn {
+    background-color: $color-700;
+    color: $color-50;
+
+    &:hover {
+        background-color: $color-400;
+    }
+}
+.cancelBtn, .logoutBtn {
+    border: 1px solid $color-700;
+    color: $color-700;
+
+    &:hover {
+        background-color: $color-500;
+        color: $color-50;
+    }
+}
+.passBtn {
+    border: 1px solid $text-info;
+    color: $text-info;
+
+    &:hover {
+        background-color: $info;
+        color: $text-light;
+    }
+}

@@ -19,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -65,9 +66,10 @@ public class AuthService {
         if (!service.isTokenValid(refreshToken) || !service.isTokenOfType(refreshToken, "refresh"))
             throw new BadRequestException("Некорректный refresh-токен");
 
-        String email = service.extractEmail(refreshToken);
+        UUID id = service.extractUserId(refreshToken);
         boolean rememberMe = service.extractRememberMe(refreshToken);
-        User u = repo.findByEmail(email).orElseThrow();
+        User u = repo.findById(id)
+                .orElseThrow(() -> new BadRequestException("Пользователь не найден"));
         UserPrincipal pr = new UserPrincipal(u);
         Duration ttl = rememberMe ? Duration.ofDays(30) : Duration.ofHours(12);
         return AuthResponse.builder()
