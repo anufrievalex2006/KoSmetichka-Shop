@@ -4,17 +4,19 @@ import styles from "@/shared/styles/profile.module.scss";
 import { ActionIcon, Button, Divider, Group, Loader, Stack, Text, Title } from "@mantine/core";
 import Image from "next/image";
 import noImage from "@/assets/no-image.png";
-import { IconCamera, IconLogout, IconPassword, IconPasswordUser, IconPencil } from "@tabler/icons-react";
+import { IconCamera, IconLogout, IconPasswordUser, IconPencil, IconUserKey } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
 import { UpdateAvatarModal } from "./UpdateAvatarModal";
 import { UpdateProfileModal } from "./UpdateProfileModal";
 import { useLogout } from "@/features/auth";
 import { AuthRepo } from "@/data/repos/AuthRepo";
+import { useRouter } from "next/navigation";
 
 const aRepo = new AuthRepo();
 const repo = new UserRepo();
 
 export const ProfileMain = () => {
+    const nav = useRouter();
     const {profile, isLoading} = useProfile(repo);
     const logout = useLogout(aRepo);
     const [modalOpened, {
@@ -75,6 +77,11 @@ export const ProfileMain = () => {
                         <Button variant="outline" classNames={{root: styles.passBtn}} leftSection={
                             <IconPasswordUser size={18}></IconPasswordUser>
                         }>Сменить пароль</Button>
+                        {profile.role === "ADMIN" && (
+                            <Button classNames={{root: styles.adminBtn}} leftSection={
+                                <IconUserKey size={18}></IconUserKey>
+                            } onClick={() => nav.push("/admin")}>Администрирование</Button>
+                        )}
                         <Button variant="outline" classNames={{root: styles.logoutBtn}} leftSection={
                             <IconLogout size={18}></IconLogout>
                         } onClick={() => logout.mutate()} loading={logout.isPending}>Выйти из системы</Button>

@@ -1,0 +1,50 @@
+@use "@/shared/styles/vars" as *;
+@use "@/shared/styles/mixins" as *;
+@use "@/shared/styles/fonts" as *;
+
+.shell, .navbar {
+    background-color: $bg-primary;
+}
+.navTitle {
+    @include h3;
+    @include mobile {
+        @include h3-mobile;
+    }
+    text-align: center;
+}
+.navbar {
+    background-color: $color-400;
+    padding: 0 !important;
+    border-right: 3px solid $color-950;
+}
+
+.btn {
+    width: 100%;
+    background-color: $color-700;
+    border-bottom: 2px solid $border;
+    transition: all 0.2s ease;
+    color: $text-light;
+    padding: 16px;
+
+    &:hover {
+        background-color: $color-100;
+        color: $text-primary;
+        & .btnLabel {
+            color: $text-primary;
+        }
+    }
+    &:last-child {
+        border-bottom: none;
+    }
+}
+.btnLabel {
+    @include h3;
+    @include mobile {
+        @include h3-mobile;
+    }
+    color: $text-light;
+
+    &:hover {
+        color: $text-primary;
+    }
+}

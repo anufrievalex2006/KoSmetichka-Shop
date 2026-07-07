@@ -10,3 +10,5 @@ export type TokenResponse = components["schemas"]["AuthResponse"];
 export type ResetPasswordDto = components["schemas"]["ResetPasswordDto"];
 export type ForgotPasswordDto = components["schemas"]["ForgotPasswordDto"];
 export type PasswordUpdateDto = components["schemas"]["PasswordUpdateDto"];
+
+export type UserRole = "ADMIN" | "CREATOR" | "CLIENT" | "SUPPLIER";

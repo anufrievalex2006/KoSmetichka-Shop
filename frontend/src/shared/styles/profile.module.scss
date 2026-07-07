@@ -147,14 +147,14 @@
     margin-left: 16px;
 }
 
-.submitBtn, .cancelBtn, .logoutBtn, .passBtn {
+.submitBtn, .cancelBtn, .logoutBtn, .passBtn, .adminBtn {
     height: 50px;
     padding: 15px 42px 15px 40px;
     @include button;
     @include mobile {
         @include button-mobile;
     }
-    transition: background-color 0.2s ease;
+    transition: all 0.2s ease;
 }
 .submitBtn {
     background-color: $color-700;
@@ -169,7 +169,7 @@
     color: $color-700;
 
     &:hover {
-        background-color: $color-500;
+        background-color: $color-700;
         color: $color-50;
     }
 }
@@ -180,5 +180,16 @@
     &:hover {
         background-color: $info;
         color: $text-light;
+    }
+}
+.adminBtn {
+    background-color: $success;
+    color: $text-light;
+    font-weight: 700;
+
+    &:hover {
+        border: 1px solid $success;
+        background-color: $bg-success-hover;
+        color: $text-primary;
     }
 }
