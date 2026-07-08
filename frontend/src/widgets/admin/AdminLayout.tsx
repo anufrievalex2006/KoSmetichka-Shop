@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { adminNavItems } from "./adminNavItems";
 import Link from "next/link";
 import styles from "@/shared/styles/adminlayout.module.scss";
+import { IconArrowLeft } from "@tabler/icons-react";
 
 const repo = new UserRepo();
 
@@ -38,17 +39,27 @@ export const AdminLayout = ({children}: {children: React.ReactNode}) => {
             navbar: styles.navbar
         }} padding="md">
             <AppShell.Navbar p="md">
-                <Text fw={700} size="lg" classNames={{
-                    root: styles.navTitle
-                }} mb="md" p="md">Администрирование</Text>
-                {items.map(x => (
-                    <NavLink key={x.href} component={Link} href={x.href} classNames={{
-                        root: styles.btn,
+                <div className={styles.navContent}>
+                    <Text fw={700} size="lg" classNames={{
+                        root: styles.navTitle
+                    }} mb="md" p="md">Администрирование</Text>
+                    <div className={styles.navItems}>
+                        {items.map(x => (
+                            <NavLink key={x.href} component={Link} href={x.href} classNames={{
+                                root: styles.btn,
+                                label: styles.btnLabel
+                            }} label={x.label} leftSection={
+                                <x.icon size={22}></x.icon>
+                            } active={pathname.startsWith(x.href)}></NavLink>
+                        ))}
+                    </div>
+                    <NavLink component={Link} href="/" classNames={{
+                        root: styles.backBtn,
                         label: styles.btnLabel
-                    }} label={x.label} leftSection={
-                        <x.icon size={22}></x.icon>
-                    } active={pathname.startsWith(x.href)}></NavLink>
-                ))}
+                    }} label="Вернуться на сайт" leftSection={
+                        <IconArrowLeft size={22}></IconArrowLeft>
+                    }></NavLink>
+                </div>
             </AppShell.Navbar>
             <AppShell.Main>{children}</AppShell.Main>
         </AppShell>

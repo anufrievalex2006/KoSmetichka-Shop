@@ -1,6 +1,6 @@
 "use client";
-import { Box, Text } from "@mantine/core";
+import { AdminMainPage } from "@/views/admin/main";
 
 export default function AdminMainRoute() {
-    return <Box mih="100vh"><Text c="red">welcome</Text></Box>;
+    return <AdminMainPage></AdminMainPage>
 }

@@ -5,6 +5,17 @@
 .shell, .navbar {
     background-color: $bg-primary;
 }
+.shell {
+    padding: 16px;
+}
+.navContent {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+.navItems {
+    flex: 1;
+}
 .navTitle {
     @include h3;
     @include mobile {
@@ -18,8 +29,7 @@
     border-right: 3px solid $color-950;
 }
 
-.btn {
-    width: 100%;
+.btn, .backBtn {
     background-color: $color-700;
     border-bottom: 2px solid $border;
     transition: all 0.2s ease;

@@ -1,0 +1,46 @@
+@use "@/shared/styles/vars" as *;
+@use "@/shared/styles/mixins" as *;
+@use "@/shared/styles/fonts" as *;
+
+.container {
+    display: flex;
+    flex-direction: column;
+    background-color: $bg-primary;
+    color: $text-primary;
+}
+
+.pageTitle {
+    @include h1;
+    @include mobile {
+        @include h1-mobile;
+    }
+}
+
+.entryTitle {
+    @include p2;
+    @include mobile {
+        @include p2-mobile;
+    }
+}
+.entryValue {
+    @include h3;
+    @include mobile {
+        @include h3-mobile;
+    }
+    font-weight: 700;
+}
+
+.statCard {
+    background-color: $bg-card;
+    border: 1px solid $border;
+    border-radius: 8px;
+    padding: 24px;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.2s ease;
+
+    &:hover {
+        border-color: $color-500;
+        background-color: $color-100;
+    }
+}
