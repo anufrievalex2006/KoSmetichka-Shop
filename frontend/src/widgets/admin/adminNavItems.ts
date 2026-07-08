@@ -1,5 +1,5 @@
 import { UserRole } from "@/domain";
-import { IconCategory, IconTags, IconNews, IconDiscount2, IconTruckDelivery, IconUsers, IconMessageQuestion, IconChartBar } from "@tabler/icons-react";
+import { IconCategory, IconTags, IconNews, IconDiscount2, IconUsers, IconMessageQuestion, IconChartBar, IconUser } from "@tabler/icons-react";
 
 export interface NavItem {
     label: string;
@@ -9,6 +9,7 @@ export interface NavItem {
 }
 
 export const adminNavItems: NavItem[] = [
+    { label: "Главная", href: "/admin", icon: IconUser, roles: ["ADMIN", "CREATOR"] },
     { label: "Категории", href: "/admin/categories", icon: IconCategory, roles: ["ADMIN", "CREATOR"] },
     { label: "Производители", href: "/admin/brands", icon: IconTags, roles: ["ADMIN", "CREATOR"] },
     { label: "Новости", href: "/admin/news", icon: IconNews, roles: ["ADMIN", "CREATOR"] },

@@ -1,3 +1,4 @@
+export * from "./dto/adminDashboard";
 export * from "./dto/appeal";
 export * from "./dto/attribute";
 export * from "./dto/brand";
@@ -10,6 +11,7 @@ export * from "./dto/shopContact";
 export * from "./dto/statistics";
 export * from "./dto/user";
 
+export * from "./repos/IAdminDashboardRepo";
 export * from "./repos/IAppealRepo";
 export * from "./repos/IAttributeRepo";
 export * from "./repos/IAuthRepo";
@@ -17,6 +19,7 @@ export * from "./repos/IBrandRepo";
 export * from "./repos/ICartRepo";
 export * from "./repos/ICategoryRepo";
 export * from "./repos/IContentCardRepo";
+export * from "./repos/IFileRepo";
 export * from "./repos/IProductRepo";
 export * from "./repos/IShopRepo";
 export * from "./repos/IUserRepo";
