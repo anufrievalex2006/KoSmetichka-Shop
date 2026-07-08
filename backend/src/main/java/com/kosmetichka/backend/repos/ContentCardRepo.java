@@ -9,4 +9,5 @@ import java.util.UUID;
 
 public interface ContentCardRepo extends JpaRepository<ContentCard, UUID> {
     List<ContentCard> findByType(ContentType type);
+    long countByType(ContentType type);
 }

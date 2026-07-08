@@ -84,6 +84,8 @@ public class SecurityConfig {
 
                         .requestMatchers("/api/cart/**").authenticated()
 
+                        .requestMatchers("/api/admin/**").hasAnyRole("ADMIN", "CREATOR")
+
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)

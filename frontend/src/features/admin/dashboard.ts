@@ -1,25 +1,19 @@
-import { IAppealRepo, IUserRepo } from "@/domain";
+import { IAdminDashboardRepo } from "@/domain/repos/IAdminDashboardRepo";
 import { useQuery } from "@tanstack/react-query";
 
-export const useDashboardStats = (appealRepo: IAppealRepo, userRepo: IUserRepo) => {
-    const {data: appeals, isLoading: areAppealsLoading} = useQuery({
-        queryKey: ["appeals"],
+export const useDashboardStats = (
+    adminRepo: IAdminDashboardRepo
+) => {
+    const {data: counts, isLoading} = useQuery({
+        queryKey: ["counts"],
         queryFn: async () => {
-            const res = await appealRepo.getAll();
-            return res;
-        }
-    });
-    const {data: users, isLoading: areUsersLoading} = useQuery({
-        queryKey: ["users"],
-        queryFn: async () => {
-            const res = await userRepo.getAll();
+            const res = await adminRepo.get();
             return res;
         }
     });
 
     return {
-        newAppealsCount: appeals?.filter(a => a.status === "NEW").length ?? 0,
-        usersCount: users?.length ?? 0,
-        isLoading: areAppealsLoading || areUsersLoading
-    };
+        data: counts,
+        isLoading
+    }
 }

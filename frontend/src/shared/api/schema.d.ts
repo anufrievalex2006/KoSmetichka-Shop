@@ -532,6 +532,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/admin/dashboard/count": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["get_5"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/users/{id}": {
         parameters: {
             query?: never;
@@ -853,6 +869,22 @@ export interface components {
             /** Format: int32 */
             totalPages: number;
             last: boolean;
+        };
+        AdminDashboardCountResponse: {
+            /** Format: int64 */
+            newAppealsCount?: number;
+            /** Format: int64 */
+            brandsCount?: number;
+            /** Format: int64 */
+            categoriesCount?: number;
+            /** Format: int64 */
+            newsCount?: number;
+            /** Format: int64 */
+            promotionsCount?: number;
+            /** Format: int64 */
+            productsCount?: number;
+            /** Format: int64 */
+            usersCount?: number;
         };
     };
     responses: never;
@@ -2089,6 +2121,26 @@ export interface operations {
                 };
                 content: {
                     "*/*": (components["schemas"]["ClientQuestionResponse"] | components["schemas"]["SupplierRequestResponse"])[];
+                };
+            };
+        };
+    };
+    get_5: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AdminDashboardCountResponse"];
                 };
             };
         };
