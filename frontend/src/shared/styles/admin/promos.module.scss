@@ -78,23 +78,6 @@
     margin-left: 16px;
 }
 
-.findBtn {
-    width: 200px;
-    height: 48px;
-    padding: 5px 14px 5px 12px;
-    @include button;
-    @include mobile {
-        @include button-mobile;
-    }
-    background-color: $color-700;
-    color: $text-light;
-    transition: all 0.2s ease;
-
-    &:hover {
-        background-color: $color-400;
-    }
-}
-
 .card {
     background-color: $bg-card;
     border: 1px solid $border;

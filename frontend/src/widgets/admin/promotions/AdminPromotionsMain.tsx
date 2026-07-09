@@ -48,7 +48,7 @@ export const AdminPromotionsMain = () => {
                 ) : (filtered!.length === 0) ? (
                     <Text c="blue" fw={500} ta="center" size="lg">По вашему запросу ничего не найдено</Text>
                 ) : (
-                    <SimpleGrid cols={{base: 1, md: 2}} spacing="xl">
+                    <SimpleGrid cols={{base: 1, md: 2}} spacing="md">
                         {filtered?.map(p => (
                             <PromotionCard key={p.id} promo={p}></PromotionCard>
                         ))}

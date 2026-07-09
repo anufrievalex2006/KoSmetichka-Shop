@@ -4,6 +4,7 @@ import com.kosmetichka.backend.models.enums.AttributeType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -19,4 +20,6 @@ public class AttributeResponse {
     private AttributeType type;
     @Schema(nullable = true)
     private String unit;
+    @Schema(nullable = true)
+    private List<String> enumValues;
 }

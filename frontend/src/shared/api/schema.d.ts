@@ -610,6 +610,7 @@ export interface components {
             /** @enum {string} */
             type: "INT" | "FLOAT" | "TEXT" | "ENUM";
             unit?: string | null;
+            enumValues?: string[] | null;
         };
         AttributeValueResponse: {
             /** Format: uuid */
@@ -727,6 +728,7 @@ export interface components {
             unit?: string;
             /** Format: uuid */
             categoryId: string;
+            enumValues?: string[];
         };
         SupplierRequestCreateDto: {
             content: string;
@@ -822,6 +824,7 @@ export interface components {
             categoryId?: string;
             /** Format: uuid */
             brandId?: string;
+            attributeValues?: components["schemas"]["AttributeValueCreateDto"][];
         };
         ContentCardUpdateDto: {
             title?: string;
@@ -847,6 +850,7 @@ export interface components {
             /** @enum {string} */
             type?: "INT" | "FLOAT" | "TEXT" | "ENUM";
             unit?: string;
+            enumValues?: string[];
         };
         AppealUpdateDto: {
             /** @enum {string} */

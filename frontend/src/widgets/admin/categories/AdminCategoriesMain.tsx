@@ -1,33 +1,33 @@
-import { BrandRepo } from "@/data/repos/BrandRepo";
-import { useBrandsList } from "@/features/admin/brand";
-import styles from "@/shared/styles/admin/brand.module.scss";
+import { CategoryRepo } from "@/data/repos/CategoryRepo";
+import { useCategoriesList } from "@/features/admin/categories";
+import styles from "@/shared/styles/admin/categories.module.scss";
 import { Button, Group, Loader, SimpleGrid, Stack, Text, TextInput, Title } from "@mantine/core";
-import { IconPlus, IconSearch } from "@tabler/icons-react";
-import { BrandCard } from "./BrandCard";
 import { useDisclosure } from "@mantine/hooks";
-import { BrandCreateModal } from "./BrandCreateModal";
+import { IconPlus, IconSearch } from "@tabler/icons-react";
 import { useState } from "react";
+import { CategoryCard } from "./CategoryCard";
+import { CategoryCreateModal } from "./CategoryCreateModal";
 
-const repo = new BrandRepo();
+const repo = new CategoryRepo();
 
-export const AdminBrandsMain = () => {
-    const {brands, isLoading} = useBrandsList(repo);
+export const AdminCategoriesMain = () => {
+    const {categories, isLoading} = useCategoriesList(repo);
     const [search, setSearch] = useState("");
     const [createModalOpened, {
-        open: openCreateBrandModal,
-        close: closeCreateBrandModal
+        open: openCreateCategoryModal,
+        close: closeCreateCategoryModal
     }] = useDisclosure(false);
 
-    const filtered = brands?.filter(b => b.name.toLowerCase().includes(search.trim().toLowerCase()));
+    const filtered = categories?.filter(c => c.name.toLowerCase().includes(search.trim().toLowerCase()));
     return (
         <Stack flex={1} gap={45}>
-            <Title order={1} classNames={{root: styles.pageTitle}}>Производители (бренды)</Title>
+            <Title order={1} classNames={{root: styles.pageTitle}}>Категории</Title>
             <Stack gap="lg">
                 <Button variant="outline" classNames={{
                     root: styles.addBtn
                 }} leftSection={
                     <IconPlus size={18}></IconPlus>
-                } onClick={openCreateBrandModal}>Добавить производителя</Button>
+                } onClick={openCreateCategoryModal}>Добавить категорию</Button>
                 <TextInput flex={1} classNames={{
                     input: styles.fieldInput2
                 }} leftSection={
@@ -40,21 +40,21 @@ export const AdminBrandsMain = () => {
                         <Loader size="lg"></Loader>
                         <Text c="blue" fw={500} size="lg">Пожалуйста, подождите...</Text>
                     </Group>
-                ) : (!brands) ? (
-                    <Text c="red" fw={700} ta="center" size="lg">Ошибка загрузки производителей</Text>
-                ) : (brands.length === 0) ? (
-                    <Text c="blue" fw={700} ta="center" size="lg">Пока нет производителей</Text>
+                ) : (!categories) ? (
+                    <Text c="red" fw={700} ta="center" size="lg">Ошибка загрузки категорий</Text>
+                ) : (categories.length === 0) ? (
+                    <Text c="blue" fw={700} ta="center" size="lg">Пока нет категорий</Text>
                 ) : (filtered!.length === 0) ? (
                     <Text c="blue" fw={500} ta="center" size="lg">По вашему запросу ничего не найдено</Text>
                 ) : (
-                    <SimpleGrid cols={{base: 1, md: 2}} spacing="md">
-                        {filtered?.map(b => (
-                            <BrandCard key={b.id} brand={b}></BrandCard>
+                    <SimpleGrid cols={{base: 1, xs: 2, sm: 2, md: 3}}>
+                        {filtered?.map(c => (
+                            <CategoryCard key={c.id} category={c}></CategoryCard>
                         ))}
                     </SimpleGrid>
                 )}
             </Stack>
-            <BrandCreateModal opened={createModalOpened} onClose={closeCreateBrandModal}></BrandCreateModal>
+            <CategoryCreateModal opened={createModalOpened} onClose={closeCreateCategoryModal}></CategoryCreateModal>
         </Stack>
     )
 }

@@ -9,6 +9,7 @@ import com.kosmetichka.backend.utilities.exceptions.NotFoundException;
 import com.kosmetichka.backend.utilities.mappers.CategoryMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -19,9 +20,11 @@ public class CategoryService {
     private final CategoryRepo repo;
     private final CategoryMapper mapper;
 
+    @Transactional(readOnly = true)
     public List<CategoryResponse> get() {
         return repo.findAll().stream().map(mapper::toResponse).toList();
     }
+    @Transactional(readOnly = true)
     public CategoryResponse getById(UUID id) {
         return mapper.toResponse(repo.findById(id)
                 .orElseThrow(() -> new NotFoundException("Категория не найдена")));
