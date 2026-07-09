@@ -1,11 +1,10 @@
 import { Button, FileButton, Group, Modal, Stack, Text, Textarea, TextInput } from "@mantine/core"
 import styles from "@/shared/styles/admin/brand.module.scss";
-import { CreateBrandForm, createBrandSchema } from "@/domain/schemas/admin/brands/create";
+import { UpdateBrandForm, updateBrandSchema } from "@/domain/schemas/admin/brands/update";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { create } from "domain";
 import { useForm } from "react-hook-form";
 import { BrandRepo } from "@/data/repos/BrandRepo";
-import { useCreateBrand, useUpdateBrand } from "@/features/admin/brand";
+import { useUpdateBrand } from "@/features/admin/brand";
 import { FileRepo } from "@/data/repos/FileRepo";
 import { useUploadFile } from "@/features/files";
 import { useEffect, useState } from "react";
@@ -32,13 +31,13 @@ export const BrandUpdateModal = ({opened, onClose, brand}: ModalProps) => {
     const [preview, setPreview] = useState<string | null>(null);
     const [fileError, setFileError] = useState<string | null>(null);
 
-    const form = useForm<CreateBrandForm>({
+    const form = useForm<UpdateBrandForm>({
         defaultValues: {
             name: "",
             description: undefined,
             logoUrl: undefined
         },
-        resolver: zodResolver(createBrandSchema)
+        resolver: zodResolver(updateBrandSchema)
     });
 
     useEffect(() => {
@@ -74,7 +73,7 @@ export const BrandUpdateModal = ({opened, onClose, brand}: ModalProps) => {
         onReset();
         onClose();
     }
-    const onSubmit = async (data: CreateBrandForm) => {
+    const onSubmit = async (data: UpdateBrandForm) => {
         let url = data.logoUrl;
         if (file) {
             try {

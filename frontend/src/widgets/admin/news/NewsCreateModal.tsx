@@ -1,15 +1,15 @@
 import { Button, FileButton, Group, Modal, Stack, Text, Textarea, TextInput } from "@mantine/core"
-import styles from "@/shared/styles/admin/brand.module.scss";
-import { CreateBrandForm, createBrandSchema } from "@/domain/schemas/admin/brands/create";
+import styles from "@/shared/styles/admin/news.module.scss";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { BrandRepo } from "@/data/repos/BrandRepo";
-import { useCreateBrand } from "@/features/admin/brand";
 import { FileRepo } from "@/data/repos/FileRepo";
 import { useUploadFile } from "@/features/files";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import noImage from "@/assets/no-image.png";
+import { ContentCardRepo } from "@/data/repos/ContentCardRepo";
+import { useCreateContentCard } from "@/features/contentCard";
+import { CreateContentCardForm, createContentCardSchema } from "@/domain/schemas/admin/contentCards/create";
 
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 const MAX_SIZE = 5 * 1024 * 1024;
@@ -19,23 +19,23 @@ interface ModalProps {
     onClose: () => void;
 }
 
-const repo = new BrandRepo();
+const repo = new ContentCardRepo();
 const fRepo = new FileRepo();
 
-export const BrandCreateModal = ({opened, onClose}: ModalProps) => {
-    const create = useCreateBrand(repo);
+export const NewsCreateModal = ({opened, onClose}: ModalProps) => {
+    const create = useCreateContentCard(repo);
     const upload = useUploadFile(fRepo);
     const [file, setFile] = useState<File | null>(null);
     const [preview, setPreview] = useState<string | null>(null);
     const [fileError, setFileError] = useState<string | null>(null);
 
-    const form = useForm<CreateBrandForm>({
+    const form = useForm<CreateContentCardForm>({
         defaultValues: {
-            name: "",
+            title: "",
             description: undefined,
-            logoUrl: undefined
+            photoUrl: undefined
         },
-        resolver: zodResolver(createBrandSchema)
+        resolver: zodResolver(createContentCardSchema)
     });
 
     useEffect(() => {
@@ -71,8 +71,8 @@ export const BrandCreateModal = ({opened, onClose}: ModalProps) => {
         onReset();
         onClose();
     }
-    const onSubmit = async (data: CreateBrandForm) => {
-        let url = data.logoUrl;
+    const onSubmit = async (data: CreateContentCardForm) => {
+        let url = data.photoUrl;
         if (file) {
             try {
                 url = await upload.mutateAsync(file);
@@ -83,16 +83,20 @@ export const BrandCreateModal = ({opened, onClose}: ModalProps) => {
             }
         }
 
-        create.mutate({...data, logoUrl: url}, {
+        create.mutate({
+            ...data,
+            type: "NEWS",
+            photoUrl: url
+        }, {
             onSuccess: handleClose
         });
     }
     return (
-        <Modal title="Создание производителя" opened={opened} onClose={onClose} centered>
+        <Modal title="Создание новости" opened={opened} onClose={onClose} centered>
             <form onSubmit={form.handleSubmit(onSubmit)}>
                 <Stack mt="xs" gap="md">
                     <div className={styles.logoPreviewWrap}>
-                        <Image alt="Логотип производителя" className={
+                        <Image alt="Фотография к новости" className={
                             styles.logoPreview
                         } fill src={preview || noImage}></Image>
                     </div>
@@ -108,20 +112,20 @@ export const BrandCreateModal = ({opened, onClose}: ModalProps) => {
                             )}
                         </FileButton>
                     </Group>
-                    <TextInput {...form.register("name")} classNames={{
+                    <TextInput {...form.register("title")} classNames={{
                         root: styles.field,
                         input: styles.fieldInput,
                         label: styles.fieldInputLabel,
                         error: styles.fieldInputError
-                    }} label="Название производителя" error={
-                        form.formState.errors.name?.message
+                    }} label="Заголовок" error={
+                        form.formState.errors.title?.message
                     }></TextInput>
                     <Textarea {...form.register("description")} classNames={{
                         root: styles.field,
                         input: `${styles.fieldInput} ${styles.textarea}`,
                         label: styles.fieldInputLabel,
                         error: styles.fieldInputError
-                    }} label="Описание производителя" error={
+                    }} label="Описание новости" error={
                         form.formState.errors.description?.message
                     }></Textarea>
                     <Group grow>
