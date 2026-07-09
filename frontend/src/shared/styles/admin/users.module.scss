@@ -1,0 +1,75 @@
+@use "@/shared/styles/vars" as *;
+@use "@/shared/styles/mixins" as *;
+@use "@/shared/styles/fonts" as *;
+
+.container {
+    display: flex;
+    flex-direction: column;
+    background-color: $bg-primary;
+    color: $text-primary;
+}
+
+.pageTitle {
+    @include h1;
+    @include mobile {
+        @include h1-mobile;
+    }
+}
+
+.fieldInput {
+    background-color: $bg-card-secondary;
+    border: 1px solid $border;
+    height: 48px;
+    @include p1;
+    @include mobile {
+        @include p1-mobile;
+    }
+}
+
+.card {
+    background-color: $bg-card;
+    border: 1px solid $border;
+    box-shadow: 0 4px 15px $shadow;
+    border-radius: 8px;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 16px;
+    transition: all 0.2s ease;
+
+    &:hover {
+        border-color: $color-500;
+        background-color: $color-100;
+    }
+}
+
+.cardTitle {
+    @include h3;
+    @include mobile {
+        @include h3-mobile;
+    }
+    overflow-wrap: break-word;
+    word-break: break-word;
+    line-clamp: 2;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.entry {
+    @include p2;
+    @include mobile {
+        @include p2-mobile;
+    }
+    font-size: 16px;
+
+    & span {
+        @include p1;
+        @include mobile {
+            @include p1-mobile;
+        }
+    }
+}
+.role span {
+    font-weight: 700;
+}
