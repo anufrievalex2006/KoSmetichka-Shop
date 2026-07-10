@@ -20,6 +20,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class AttributeService {
     private final AttributeRepo repo;
     private final CategoryRepo cRepo;

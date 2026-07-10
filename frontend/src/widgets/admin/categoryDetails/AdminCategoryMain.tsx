@@ -10,6 +10,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { AttributeCreateModal } from "./AttributeCreateModal";
 import { AttributeUpdateModal } from "./AttributeUpdateModal";
 import { AttributeDto } from "@/domain";
+import { AdminProductsMain } from "./products/AdminProductsMain";
 
 interface Props {
     id: string;
@@ -32,7 +33,6 @@ export const AdminCategoryMain = ({id}: Props) => {
     }] = useDisclosure(false);
     const [selectedAttr, setSelectedAttr] = useState<AttributeDto | null>(null);
     const [search, setSearch] = useState("");
-    const [prodSearch, setProdSearch] = useState("");
 
     const onDelete = (id: string) => {
         if (confirm("Вы уверены, что хотите удалить этот атрибут?"))
@@ -113,23 +113,7 @@ export const AdminCategoryMain = ({id}: Props) => {
                     </Table>
                 )}
             </Stack>
-            <Stack mt={45} gap="lg">
-                <Title order={2} classNames={{root: styles.pageTitle2}}>Товары этой категории</Title>
-                <Stack gap="lg">
-                    <Button variant="outline" classNames={{
-                        root: styles.addBtn
-                    }} leftSection={
-                        <IconPlus size={18}></IconPlus>
-                    }>Добавить товар</Button>
-                    <TextInput flex={1} classNames={{
-                        input: styles.fieldInput2
-                    }} leftSection={
-                        <IconSearch size={18}></IconSearch>
-                    } placeholder="Найти по названию" onChange={
-                        (e) => setProdSearch(e.currentTarget.value)
-                    }></TextInput>
-                </Stack>
-            </Stack>
+            <AdminProductsMain categoryId={category.id}></AdminProductsMain>
             <AttributeCreateModal categoryId={id} opened={createModalOpened} onClose={closeCreateAttrModal}></AttributeCreateModal>
             {selectedAttr && (
                 <AttributeUpdateModal attribute={selectedAttr} opened={updateModalOpened} onClose={closeUpdateAttrModal}></AttributeUpdateModal>

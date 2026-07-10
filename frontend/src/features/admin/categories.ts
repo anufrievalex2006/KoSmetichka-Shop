@@ -19,7 +19,7 @@ export const useCategoriesList = (repo: ICategoryRepo) => {
 
 export const useCategoryDetails = (id: string, repo: ICategoryRepo) => {
     const {data: category, isLoading} = useQuery({
-        queryKey: ["category", id],
+        queryKey: ["categories", id],
         queryFn: async () => {
             const res = await repo.getById(id);
             return res;
@@ -73,10 +73,7 @@ export const useUpdateCategory = (repo: ICategoryRepo) => {
 
     const update = useMutation({
         mutationFn: ({id, req}: UpdateProps) => repo.update(id, req),
-        onSuccess: (_, vars) => {
-            queryClient.invalidateQueries({
-                queryKey: ["category", vars.id]
-            });
+        onSuccess: () => {
             queryClient.invalidateQueries({
                 queryKey: ["categories"]
             });
@@ -105,10 +102,7 @@ export const useDeleteCategory = (repo: ICategoryRepo) => {
 
     const deleteMut = useMutation({
         mutationFn: (id: string) => repo.delete(id),
-        onSuccess: (_, id) => {
-            queryClient.invalidateQueries({
-                queryKey: ["category", id]
-            });
+        onSuccess: () => {
             queryClient.invalidateQueries({
                 queryKey: ["categories"]
             });

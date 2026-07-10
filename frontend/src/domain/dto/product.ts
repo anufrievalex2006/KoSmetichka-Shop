@@ -14,4 +14,5 @@ export interface ProductFilterParams {
     page?: number;
     size?: number;
     sort?: string[];
+    attributes?: Record<string, string>;
 }

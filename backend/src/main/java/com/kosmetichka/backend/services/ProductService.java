@@ -21,12 +21,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ProductService {
     private final ProductRepo repo;
     private final ProductMapper mapper;
@@ -42,6 +44,7 @@ public class ProductService {
         return mapper.toResponse(repo.findById(id)
                 .orElseThrow(() -> new NotFoundException("Товар не найден")));
     }
+    @Transactional
     public ProductResponse create(ProductCreateDto req) {
         Product p = mapper.toEntity(req);
         p.setCategory(cRepo.findById(req.getCategoryId())
@@ -51,6 +54,7 @@ public class ProductService {
         p.getAttributeValues().addAll(buildAttributeValues(req.getAttributeValues(), p));
         return mapper.toResponse(repo.save(p));
     }
+    @Transactional
     public ProductResponse update(UUID id, ProductUpdateDto req) {
         Product product = repo.findById(id)
                 .orElseThrow(() -> new NotFoundException("Товар не найден"));
@@ -68,6 +72,7 @@ public class ProductService {
         }
         return mapper.toResponse(repo.save(product));
     }
+    @Transactional
     public void delete(UUID id) {
         if (!repo.existsById(id))
             throw new NotFoundException("Товар не найден");

@@ -3,7 +3,15 @@ import { api } from "../api/axiosInstance";
 
 export class ProductRepo implements IProductRepo {
     async getAll(params?: ProductFilterParams): Promise<ProductDtoPagedList> {
-        const res = await api.get<ProductDtoPagedList>('/products', { params });
+        const {attributes, ...rest} = params ?? {};
+        const hasAttrs = attributes && Object.keys(attributes).length > 0;
+
+        const res = await api.get<ProductDtoPagedList>('/products', {
+            params: {
+                ...rest,
+                attributes: hasAttrs ? JSON.stringify(attributes) : undefined
+            }
+        });
         return res.data;
     }
     async getById(id: string): Promise<ProductDto> {

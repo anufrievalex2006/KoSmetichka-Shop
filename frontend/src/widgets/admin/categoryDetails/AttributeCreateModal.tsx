@@ -29,6 +29,7 @@ export const AttributeCreateModal = ({opened, onClose, categoryId}: Props) => {
         create.mutate({...data, categoryId}, {
             onSuccess: () => {
                 form.reset();
+                onClose();
             }
         });
     }

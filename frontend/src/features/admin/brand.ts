@@ -19,7 +19,7 @@ export const useBrandsList = (repo: IBrandRepo) => {
 
 export const useBrandDetails = (id: string, repo: IBrandRepo) => {
     const {data: brand, isLoading} = useQuery({
-        queryKey: ["brand", id],
+        queryKey: ["brands", id],
         queryFn: async () => {
             const res = await repo.getById(id);
             return res;
@@ -76,10 +76,7 @@ export const useUpdateBrand = (repo: IBrandRepo) => {
 
     const update = useMutation({
         mutationFn: ({id, req}: UpdateProps) => repo.update(id, req),
-        onSuccess: (_, vars) => {
-            queryClient.invalidateQueries({
-                queryKey: ["brand", vars.id]
-            });
+        onSuccess: () => {
             queryClient.invalidateQueries({
                 queryKey: ["brands"]
             });
@@ -112,9 +109,6 @@ export const useDeleteBrand = (repo: IBrandRepo) => {
     const deleteMut = useMutation({
         mutationFn: (id: string) => repo.delete(id),
         onSuccess: (_, id) => {
-            queryClient.invalidateQueries({
-                queryKey: ["brand", id]
-            });
             queryClient.invalidateQueries({
                 queryKey: ["brands"]
             });

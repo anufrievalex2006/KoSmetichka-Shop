@@ -71,10 +71,7 @@ export const useUpdateContentCard = (repo: IContentCardRepo) => {
 
     const update = useMutation({
         mutationFn: ({id, req}: UpdateProps) => repo.update(id, req),
-        onSuccess: (_, vars) => {
-            queryClient.invalidateQueries({
-                queryKey: ["cards", vars.id]
-            });
+        onSuccess: () => {
             queryClient.invalidateQueries({
                 queryKey: ["cards"]
             });
@@ -103,10 +100,7 @@ export const useDeleteContentCard = (repo: IContentCardRepo) => {
 
     const deleteMut = useMutation({
         mutationFn: (id: string) => repo.delete(id),
-        onSuccess: (_, id) => {
-            queryClient.invalidateQueries({
-                queryKey: ["cards", id]
-            });
+        onSuccess: () => {
             queryClient.invalidateQueries({
                 queryKey: ["cards"]
             });

@@ -20,7 +20,7 @@ export const useContactsList = (repo: IContactsRepo) => {
 
 export const useContactDetails = (id: string, repo: IContactsRepo) => {
     const {data: contact, isLoading} = useQuery({
-        queryKey: ["contact", id],
+        queryKey: ["contacts", id],
         queryFn: async () => {
             const res = await repo.getById(id);
             return res;
@@ -74,12 +74,9 @@ export const useUpdateContact = (repo: IContactsRepo) => {
 
     const update = useMutation({
         mutationFn: ({id, req}: UpdateProps) => repo.update(id, req),
-        onSuccess: (_, vars) => {
+        onSuccess: () => {
             queryClient.invalidateQueries({
                 queryKey: ["contacts"]
-            });
-            queryClient.invalidateQueries({
-                queryKey: ["contact", vars.id]
             });
             notifications.show({
                 title: "Успех",
@@ -106,12 +103,9 @@ export const useDeleteContact = (repo: IContactsRepo) => {
 
     const deleteMut = useMutation({
         mutationFn: (id: string) => repo.delete(id),
-        onSuccess: (_, id) => {
+        onSuccess: () => {
             queryClient.invalidateQueries({
                 queryKey: ["contacts"]
-            });
-            queryClient.invalidateQueries({
-                queryKey: ["contact", id]
             });
             notifications.show({
                 title: "Успех",

@@ -34,6 +34,7 @@ export const AttributeUpdateModal = ({opened, onClose, attribute}: Props) => {
         }, {
             onSuccess: () => {
                 form.reset();
+                onClose();
             }
         });
     }

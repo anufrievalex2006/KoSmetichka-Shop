@@ -58,9 +58,6 @@ export const useUpdateAttribute = (repo: IAttributeRepo) => {
         mutationFn: ({id, req}: UpdateProps) => repo.update(id, req),
         onSuccess: (_, vars) => {
             queryClient.invalidateQueries({
-                queryKey: ["attribute", vars.id]
-            });
-            queryClient.invalidateQueries({
                 queryKey: ["attributes"]
             });
             notifications.show({
@@ -91,9 +88,6 @@ export const useDeleteAttribute = (repo: IAttributeRepo) => {
         onSuccess: (_, id) => {
             queryClient.invalidateQueries({
                 queryKey: ["attributes"]
-            });
-            queryClient.invalidateQueries({
-                queryKey: ["attribute", id]
             });
             notifications.show({
                 title: "Успех",
