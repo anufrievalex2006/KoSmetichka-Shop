@@ -1,12 +1,14 @@
-import { Divider, Group, Loader, Stack, Text, Title } from "@mantine/core"
+import { ActionIcon, Divider, Group, Loader, Stack, Text, Title } from "@mantine/core"
 import styles from "@/shared/styles/admin/products.module.scss";
 import { ProductRepo } from "@/data/repos/ProductRepo";
-import { useProductDetails } from "@/features/admin/products";
+import { useDeleteProduct, useProductDetails } from "@/features/admin/products";
 import { BrandRepo } from "@/data/repos/BrandRepo";
 import { AttributeRepo } from "@/data/repos/AttributeRepo";
 import { useBrandsList } from "@/features/admin/brand";
 import { useCategoryAttributes } from "@/features/admin/attributes";
 import { Fragment } from "react/jsx-runtime";
+import { IconPencil, IconTrash } from "@tabler/icons-react";
+import { useRouter } from "next/navigation";
 
 interface Props {
     id: string;
@@ -15,7 +17,15 @@ interface Props {
 const repo = new ProductRepo();
 
 export const AdminProductDetailsMain = ({id}: Props) => {
+    const nav = useRouter();
     const {product, isLoading} = useProductDetails(id, repo);
+    const del = useDeleteProduct(repo);
+    const onDelete = (id: string) => {
+        if (confirm("Вы уверены, что хотите удалить этот товар?")) {
+            del.mutate(id);
+            nav.push(`/admin/categories/${product?.category.id}`);
+        }
+    }
     return isLoading ? (
         <Group gap="md" justify="center">
             <Loader size="lg"></Loader>
@@ -27,7 +37,23 @@ export const AdminProductDetailsMain = ({id}: Props) => {
         <Stack flex={1} gap={45}>
             <Title order={1} classNames={{root: styles.pageTitle}}>Информация о товаре</Title>
             <Stack flex={1} p="xl" classNames={{root: styles.card}}>
-                <Title order={2} fw={700} classNames={{root: styles.cardTitle}}>{product.name}</Title>
+                <Group justify="space-between">
+                    <Title order={2} fw={700} classNames={{root: styles.cardTitle}}>{product.name}</Title>
+                    <Group gap="sm">
+                        <ActionIcon size={40} color="green" onClick={(e) => {
+                            e.stopPropagation();
+                            nav.push(`/admin/products/${product.id}/update`);
+                        }}>
+                            <IconPencil size={22}></IconPencil>
+                        </ActionIcon>
+                        <ActionIcon size={40} color="red" onClick={(e) => {
+                            e.stopPropagation();
+                            onDelete(product.id);
+                        }}>
+                            <IconTrash size={22}></IconTrash>
+                        </ActionIcon>
+                    </Group>
+                </Group>
                 <Divider size={4}></Divider>
                 <Stack gap={8}>
                     <Group grow>
