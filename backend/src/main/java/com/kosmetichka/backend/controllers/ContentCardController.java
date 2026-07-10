@@ -5,6 +5,7 @@ import com.kosmetichka.backend.dtos.requests.update.ContentCardUpdateDto;
 import com.kosmetichka.backend.dtos.responses.ContentCardResponse;
 import com.kosmetichka.backend.models.enums.ContentType;
 import com.kosmetichka.backend.services.ContentCardService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+@Tag(name = "Новости + Акции", description = "Новости, акции и другой контент в карточках на сайте")
 @RestController
 @RequestMapping("/api/content")
 @RequiredArgsConstructor

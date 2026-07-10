@@ -4,6 +4,7 @@ import com.kosmetichka.backend.dtos.requests.create.ShopContactCreateDto;
 import com.kosmetichka.backend.dtos.requests.update.ShopContactUpdateDto;
 import com.kosmetichka.backend.dtos.responses.ShopContactResponse;
 import com.kosmetichka.backend.services.ContactService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+@Tag(name = "Контакты", description = "Адреса, номера телефона и способы связи с магазином")
 @RestController
 @RequestMapping("/api/shop/contacts")
 @RequiredArgsConstructor

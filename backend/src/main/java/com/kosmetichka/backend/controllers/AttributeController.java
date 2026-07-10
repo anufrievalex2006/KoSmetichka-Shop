@@ -4,6 +4,7 @@ import com.kosmetichka.backend.dtos.requests.create.AttributeCreateDto;
 import com.kosmetichka.backend.dtos.requests.update.AttributeUpdateDto;
 import com.kosmetichka.backend.dtos.responses.AttributeResponse;
 import com.kosmetichka.backend.services.AttributeService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+@Tag(name = "Атрибуты", description = "Атрибуты категорий товаров - CRUD")
 @RestController
 @RequestMapping("/api/attributes")
 @RequiredArgsConstructor

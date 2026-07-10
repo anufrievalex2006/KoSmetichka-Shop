@@ -7,6 +7,7 @@ import com.kosmetichka.backend.dtos.requests.reset_password.ResetPasswordDto;
 import com.kosmetichka.backend.dtos.responses.AuthResponse;
 import com.kosmetichka.backend.services.AuthService;
 import com.kosmetichka.backend.services.PasswordResetService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.Duration;
 
+@Tag(name = "Аутентификация и авторизация", description = "Регистрация, вход, обновление токенов и восстановление пароля")
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor

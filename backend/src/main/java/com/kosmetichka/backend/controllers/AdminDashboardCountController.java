@@ -4,11 +4,13 @@ import com.kosmetichka.backend.dtos.responses.AdminDashboardCountResponse;
 import com.kosmetichka.backend.models.enums.UserRole;
 import com.kosmetichka.backend.security.UserPrincipal;
 import com.kosmetichka.backend.services.AdminDashboardCountService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "Дашборд администратора", description = "Сводная статистика для главной страницы раздела \"Администрирование\"")
 @RestController
 @RequestMapping("/api/admin/dashboard")
 @RequiredArgsConstructor

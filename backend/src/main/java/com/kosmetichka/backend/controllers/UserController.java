@@ -6,6 +6,7 @@ import com.kosmetichka.backend.dtos.responses.StatisticsResponse;
 import com.kosmetichka.backend.dtos.responses.UserResponse;
 import com.kosmetichka.backend.security.UserPrincipal;
 import com.kosmetichka.backend.services.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -17,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.UUID;
 
+@Tag(name = "Пользователи", description = "Профиль текущего пользователя и управление пользователями Администратором")
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor

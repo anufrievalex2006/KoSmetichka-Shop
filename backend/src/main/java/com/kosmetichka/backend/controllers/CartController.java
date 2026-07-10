@@ -5,6 +5,7 @@ import com.kosmetichka.backend.dtos.requests.update.CartPositionUpdateDto;
 import com.kosmetichka.backend.dtos.responses.CartResponse;
 import com.kosmetichka.backend.security.UserPrincipal;
 import com.kosmetichka.backend.services.CartService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
+@Tag(name = "Корзина", description = "Корзина текущего пользователя (поддерживает CRUD позиций)")
 @RestController
 @RequestMapping("/api/cart")
 @RequiredArgsConstructor

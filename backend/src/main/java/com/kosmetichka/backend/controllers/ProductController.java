@@ -10,6 +10,7 @@ import com.kosmetichka.backend.dtos.responses.PageResponse;
 import com.kosmetichka.backend.dtos.responses.ProductResponse;
 import com.kosmetichka.backend.services.ProductService;
 import com.kosmetichka.backend.utilities.exceptions.BadRequestException;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
@@ -26,6 +27,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Tag(name = "Товары", description = "Управление товарами (CRUD с фильтрацией, пагинацией и сортировкой)")
 @RestController
 @RequestMapping("/api/products")
 @RequiredArgsConstructor

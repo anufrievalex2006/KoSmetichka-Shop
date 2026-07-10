@@ -4,6 +4,7 @@ import com.kosmetichka.backend.dtos.requests.create.BrandCreateDto;
 import com.kosmetichka.backend.dtos.requests.update.BrandUpdateDto;
 import com.kosmetichka.backend.dtos.responses.BrandResponse;
 import com.kosmetichka.backend.services.BrandService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+@Tag(name = "Производители", description = "Производители товаров")
 @RestController
 @RequestMapping("/api/brands")
 @RequiredArgsConstructor

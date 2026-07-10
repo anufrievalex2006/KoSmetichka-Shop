@@ -7,10 +7,6 @@ import { ContentCardDto } from "@/domain";
 
 const repo = new ContentCardRepo();
 
-const news: ContentCardDto[] = [
-    {id: "1", title: "Тест акции", description: "Тест описания акции", type: "PROMO", photoUrl: null, createdAt: "2026-04-21T13:25:00.426", updatedAt: "2026-06-29T18:42:59.382"}
-]
-
 export const PromotionsMain = () => {
     const {cards, isLoading} = useContentCardsList(repo, "PROMO");
     return (
@@ -23,11 +19,11 @@ export const PromotionsMain = () => {
                 </Group>
             ) : (!cards) ? (
                 <Text c="red" fw={700} size="xl" ta="center">Ошибка загрузки акций</Text>
-            ) : (news.length === 0) ? (
+            ) : (cards.filter(c => c.type === "PROMO").length === 0) ? (
                 <Text c="blue" fw={700} size="xl" ta="center">Пока нет акций!</Text>
             ) : (
                 <SimpleGrid cols={{base: 1, sm: 2, md: 3}} spacing="md">
-                    {news.map(c => (
+                    {cards.filter(c => c.type === "PROMO").map(c => (
                         <PromotionCard key={c.id} promo={c}></PromotionCard>
                     ))}
                 </SimpleGrid>
