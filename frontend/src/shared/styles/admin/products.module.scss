@@ -10,6 +10,12 @@
 }
 
 .pageTitle {
+    @include h1;
+    @include mobile {
+        @include h1-mobile;
+    }
+}
+.pageTitle2 {
     @include h2;
     @include mobile {
         @include h2-mobile;
@@ -87,13 +93,7 @@
     border-radius: 8px;
     justify-content: space-between;
     padding: 16px;
-    transition: all 0.2s ease;
     cursor: pointer;
-
-    &:hover {
-        border-color: $color-500;
-        background-color: $color-100;
-    }
 }
 
 .cardTitle {
@@ -135,4 +135,19 @@
         background-color: $color-700;
         color: $color-50;
     }
+}
+
+.entryTitle {
+    @include p2;
+    @include mobile {
+        @include p2-mobile;
+    }
+    font-size: 16px;
+}
+.entryValue {
+    @include p1;
+    @include mobile {
+        @include p1-mobile;
+    }
+    font-size: 18px;
 }

@@ -59,7 +59,7 @@ export const AdminProductsMain = ({categoryId}: Props) => {
 
     return (
         <Stack mt={45} gap="lg">
-            <Title order={2} classNames={{root: styles.pageTitle}}>Товары этой категории</Title>
+            <Title order={2} classNames={{root: styles.pageTitle2}}>Товары этой категории</Title>
             <Stack gap="lg">
                 <Button variant="outline" classNames={{
                     root: styles.addBtn

@@ -1,4 +1,4 @@
-import { IProductRepo, ProductCreateDto, ProductFilterParams } from "@/domain";
+import { IProductRepo, ProductCreateDto, ProductFilterParams, ProductUpdateDto } from "@/domain";
 import { notifications } from "@mantine/notifications";
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -76,4 +76,67 @@ export const useCreateProduct = (repo: IProductRepo) => {
     });
 
     return create;
+}
+
+interface UpdateProps {
+    id: string;
+    req: ProductUpdateDto;
+}
+
+export const useUpdateProduct = (repo: IProductRepo) => {
+    const queryClient = useQueryClient();
+
+    const update = useMutation({
+        mutationFn: ({id, req}: UpdateProps) => repo.update(id, req),
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ["products"]
+            });
+            notifications.show({
+                title: "Успех",
+                message: "Товар успешно обновлен",
+                color: "green",
+                position: "top-right"
+            });
+        },
+        onError: () => {
+            notifications.show({
+                title: "Ошибка",
+                message: "Ошибка обновления товара",
+                color: "red",
+                position: "top-right"
+            });
+        }
+    });
+
+    return update;
+}
+
+export const useDeleteProduct = (repo: IProductRepo) => {
+    const queryClient = useQueryClient();
+
+    const deleteMut = useMutation({
+        mutationFn: (id: string) => repo.delete(id),
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ["products"]
+            });
+            notifications.show({
+                title: "Успех",
+                message: "Товар успешно удален",
+                color: "green",
+                position: "top-right"
+            });
+        },
+        onError: () => {
+            notifications.show({
+                title: "Ошибка",
+                message: "Ошибка удаления товара",
+                color: "red",
+                position: "top-right"
+            });
+        }
+    });
+
+    return deleteMut;
 }

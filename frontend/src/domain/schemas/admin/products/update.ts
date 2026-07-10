@@ -3,4 +3,4 @@ import { createProductSchema } from "./create";
 
 export const updateProductSchema = createProductSchema;
 
-export type UpdateProductForm = z.infer<typeof updateProductSchema>;
+export type UpdateProductForm = z.infer<ReturnType<typeof updateProductSchema>>;
