@@ -38,10 +38,6 @@ export const AdminProductsMain = ({categoryId}: Props) => {
         open: openCreateProductModal,
         close: closeCreateProductModal
     }] = useDisclosure(false);
-    const [updateModalOpened, {
-        open: openUpdateProductModal,
-        close: closeUpdateProductModal
-    }] = useDisclosure(false);
     
     const setAttrFilter = (attrId: string, value: string | null) => {
         const next = {...filters.attributes};

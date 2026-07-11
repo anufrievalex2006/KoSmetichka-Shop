@@ -39,7 +39,7 @@ export const Main = () => {
                 <Text classNames={{root: styles.heroTxt}}>
                     Подберите уход и макияж под себя - от корейских новинок до проверенных классик
                 </Text>
-                <Button onClick={() => nav.push("/")} classNames={{root: styles.heroButton}}>Перейти в Каталог</Button>
+                <Button onClick={() => nav.push("/catalog")} classNames={{root: styles.heroButton}}>Перейти в Каталог</Button>
             </Stack>
             <Stack gap="lg" classNames={{root: styles.section}}>
                 <Title order={2} classNames={{root: styles.sectionTitle}}>Категории</Title>
@@ -52,7 +52,7 @@ export const Main = () => {
                     ) : !categories ? (
                         <Text c="red" fw={700} ta="center" size="lg">Произошла ошибка при загрузке категорий товаров</Text>
                     ) : categories.map(c => (
-                        <Link key={c.id} href={`/catalog?categoryId=${c.id}`} className={styles.categoryCard}>
+                        <Link key={c.id} href={`/catalog/${c.id}`} className={styles.categoryCard}>
                             <Text classNames={{root: styles.categoryName}}>{c.name}</Text>
                         </Link>
                     ))}
