@@ -1,6 +1,7 @@
 package com.kosmetichka.backend.services;
 
 import com.kosmetichka.backend.dtos.requests.update.PasswordUpdateDto;
+import com.kosmetichka.backend.dtos.requests.update.UserRoleUpdateDto;
 import com.kosmetichka.backend.dtos.requests.update.UserUpdateDto;
 import com.kosmetichka.backend.dtos.responses.StatisticsResponse;
 import com.kosmetichka.backend.dtos.responses.UserResponse;
@@ -52,6 +53,15 @@ public class UserService {
 
         service.delete(oldUrl);
         return mapper.toResponse(saved);
+    }
+    public UserResponse updateRole(UserPrincipal pr, UUID id, UserRoleUpdateDto req) {
+        if (pr.getId().equals(id))
+            throw new BadRequestException("Вы не можете изменить роль самому себе");
+
+        User u = repo.findById(id)
+                .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
+        u.setRole(req.getRole());
+        return mapper.toResponse(repo.save(u));
     }
     public void changePassword(UserPrincipal pr, PasswordUpdateDto req) {
         User u = repo.findById(pr.getId())

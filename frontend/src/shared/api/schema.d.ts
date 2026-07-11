@@ -260,6 +260,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/users/{id}/role": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["updateRole"];
+        trace?: never;
+    };
     "/api/users/me": {
         parameters: {
             query?: never;
@@ -782,6 +798,10 @@ export interface components {
             user?: components["schemas"]["UserResponse"];
             fullName: string;
         };
+        UserRoleUpdateDto: {
+            /** @enum {string} */
+            role: "ADMIN" | "CREATOR" | "CLIENT" | "SUPPLIER";
+        };
         UserUpdateDto: {
             name?: string;
             /** Format: email */
@@ -951,6 +971,7 @@ export interface operations {
                 brandId?: string;
                 minPrice?: number;
                 maxPrice?: number;
+                attributes?: string;
                 /** @description Zero-based page index (0..N) */
                 page?: number;
                 /** @description The size of the page to be returned */
@@ -1388,6 +1409,32 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["ClientQuestionResponse"];
+                };
+            };
+        };
+    };
+    updateRole: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UserRoleUpdateDto"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["UserResponse"];
                 };
             };
         };

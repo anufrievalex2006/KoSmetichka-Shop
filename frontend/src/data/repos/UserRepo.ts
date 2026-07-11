@@ -1,4 +1,4 @@
-import { IUserRepo, PasswordUpdateDto, ProfileDto, ProfileUpdateDto, StatisticsDto } from "@/domain";
+import { IUserRepo, PasswordUpdateDto, ProfileDto, ProfileUpdateDto, StatisticsDto, UserRoleUpdateDto } from "@/domain";
 import { api } from "../api/axiosInstance";
 
 export class UserRepo implements IUserRepo {
@@ -29,6 +29,10 @@ export class UserRepo implements IUserRepo {
     }
     async getAll(): Promise<ProfileDto[]> {
         const res = await api.get<ProfileDto[]>("/users");
+        return res.data;
+    }
+    async updateRole(id: string, req: UserRoleUpdateDto): Promise<ProfileDto> {
+        const res = await api.patch<ProfileDto>(`/users/${id}/role`, req);
         return res.data;
     }
     async delete(id: string): Promise<void> {

@@ -12,3 +12,4 @@ export type ForgotPasswordDto = components["schemas"]["ForgotPasswordDto"];
 export type PasswordUpdateDto = components["schemas"]["PasswordUpdateDto"];
 
 export type UserRole = "ADMIN" | "CREATOR" | "CLIENT" | "SUPPLIER";
+export type UserRoleUpdateDto = components["schemas"]["UserRoleUpdateDto"];

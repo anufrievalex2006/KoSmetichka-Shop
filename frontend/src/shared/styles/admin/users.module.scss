@@ -16,6 +16,9 @@
     }
 }
 
+.field {
+    position: relative;
+}
 .fieldInput {
     background-color: $bg-card-secondary;
     border: 1px solid $border;
@@ -24,6 +27,27 @@
     @include mobile {
         @include p1-mobile;
     }
+}
+.fieldInputLabel {
+    position: absolute;
+    top: -8px;
+    left: 15px;
+    background-color: $bg-card-secondary;
+    padding-inline: 4px;
+    z-index: 1;
+    @include p2;
+    @include mobile {
+        @include p2-mobile;
+    }
+}
+:global(.mantine-InputWrapper-root[data-error]) {
+    .fieldInputLabel {
+        color: $danger;
+    }
+}
+.fieldInputError {
+    color: $danger;
+    margin-left: 16px;
 }
 
 .card {
@@ -72,4 +96,44 @@
 }
 .role span {
     font-weight: 700;
+}
+
+.changeRole {
+    @include p1;
+    @include mobile {
+        @include p1-mobile;
+    }
+    color: $info;
+
+    &:hover {
+        text-decoration: underline;
+        cursor: pointer;
+    }
+}
+
+.submitBtn, .cancelBtn {
+    height: 50px;
+    padding: 15px 42px 15px 40px;
+    @include button;
+    @include mobile {
+        @include button-mobile;
+    }
+    transition: all 0.2s ease;
+}
+.submitBtn {
+    background-color: $color-700;
+    color: $color-50;
+
+    &:hover {
+        background-color: $color-400;
+    }
+}
+.cancelBtn {
+    border: 1px solid $color-700;
+    color: $color-700;
+
+    &:hover {
+        background-color: $color-700;
+        color: $color-50;
+    }
 }

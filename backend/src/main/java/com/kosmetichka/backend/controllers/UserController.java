@@ -1,6 +1,7 @@
 package com.kosmetichka.backend.controllers;
 
 import com.kosmetichka.backend.dtos.requests.update.PasswordUpdateDto;
+import com.kosmetichka.backend.dtos.requests.update.UserRoleUpdateDto;
 import com.kosmetichka.backend.dtos.requests.update.UserUpdateDto;
 import com.kosmetichka.backend.dtos.responses.StatisticsResponse;
 import com.kosmetichka.backend.dtos.responses.UserResponse;
@@ -58,6 +59,10 @@ public class UserController {
     @GetMapping
     public ResponseEntity<List<UserResponse>> getAll() {
         return ResponseEntity.ok(service.get());
+    }
+    @PatchMapping("/{id}/role")
+    public ResponseEntity<UserResponse> updateRole(@PathVariable UUID id, @Valid @RequestBody UserRoleUpdateDto req) {
+        return ResponseEntity.ok(service.updateRole(principal(), id, req));
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
