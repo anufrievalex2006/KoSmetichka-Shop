@@ -1,0 +1,160 @@
+@use "@/shared/styles/vars" as *;
+@use "@/shared/styles/mixins" as *;
+@use "@/shared/styles/fonts" as *;
+
+.container {
+    display: flex;
+    flex-direction: column;
+    background-color: $bg-primary;
+    color: $text-primary;
+}
+
+.pageTitle {
+    @include h1;
+    @include mobile {
+        @include h1-mobile;
+    }
+}
+
+.field {
+    position: relative;
+}
+.fieldInput {
+    background-color: $bg-card-secondary;
+    border: 1px solid $border-strong;
+    height: 48px;
+    padding: 8px 16px;
+    @include p1;
+    @include mobile {
+        @include p1-mobile;
+    }
+
+    &[data-error="true"] {
+        border: 1px solid $danger;
+    }
+}
+.fieldInputLabel {
+    position: absolute;
+    top: -8px;
+    left: 15px;
+    background-color: $bg-card-secondary;
+    padding-inline: 4px;
+    border-radius: 8px;
+    border: 1px solid $border-strong;
+    z-index: 1;
+    @include p2;
+    @include mobile {
+        @include p2-mobile;
+    }
+}
+:global(.mantine-InputWrapper-root[data-error]) {
+    .fieldInputLabel {
+        color: $danger;
+    }
+}
+.fieldInputError {
+    color: $danger;
+    margin-left: 16px;
+}
+
+.card {
+    background-color: $bg-card;
+    border: 1px solid $border;
+    box-shadow: 0 4px 15px $shadow;
+    border-radius: 8px;
+    justify-content: space-between;
+    padding: 16px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+
+    &:hover {
+        border-color: $color-500;
+        background-color: $color-100;
+    }
+}
+
+.cardTitle {
+    @include h2;
+    @include mobile {
+        @include h2-mobile;
+    }
+    color: $text-light;
+}
+.subcardTitle {
+    @include h3;
+    @include mobile {
+        @include h3-mobile;
+    }
+}
+
+.submitBtn, .cancelBtn {
+    height: 50px;
+    padding: 15px 42px 15px 40px;
+    @include button;
+    @include mobile {
+        @include button-mobile;
+    }
+    transition: all 0.2s ease;
+}
+.submitBtn {
+    background-color: $color-700;
+    color: $color-50;
+
+    &:hover {
+        background-color: $color-400;
+    }
+}
+.cancelBtn {
+    border: 1px solid $color-700;
+    color: $color-700;
+
+    &:hover {
+        background-color: $color-700;
+        color: $color-50;
+    }
+}
+
+.clientCard, .supplierCard {
+    padding: 20px;
+    background-color: $color-400;
+    border-radius: 8px;
+    border: 1px solid $border;
+    box-shadow: 0 4px 15px $shadow;
+}
+.supplierCard {
+    background-color: $color-500;
+}
+
+.entryTitle {
+    @include p2;
+    @include mobile {
+        @include p2-mobile;
+    }
+    font-size: 16px;
+}
+.entryValue {
+    @include p1;
+    @include mobile {
+        @include p1-mobile;
+    }
+    font-size: 18px;
+}
+
+.question {
+    @include h3;
+    @include mobile {
+        @include h3-mobile;
+    }
+    border: 2px solid $border-strong;
+    width: fit-content;
+    padding: 8px;
+    border-radius: 16px;
+    font-weight: 700;
+}
+
+.contacts {
+    @include h4;
+    @include mobile {
+        @include h4-mobile;
+    }
+}

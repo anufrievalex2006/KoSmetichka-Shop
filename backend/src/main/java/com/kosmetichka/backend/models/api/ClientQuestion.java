@@ -12,6 +12,5 @@ import lombok.experimental.SuperBuilder;
 @Entity
 @DiscriminatorValue("CLIENT_QUESTION")
 public class ClientQuestion extends Appeal {
-    @Column(nullable = false)
     private String fullName;
 }

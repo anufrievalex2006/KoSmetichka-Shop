@@ -7,6 +7,7 @@ import { CategoryRepo } from "@/data/repos/CategoryRepo";
 import { ContentCardRepo } from "@/data/repos/ContentCardRepo";
 import { useCategoriesList } from "@/features/admin/categories";
 import { useContentCardsList } from "@/features/contentCard";
+import { formatDateTime } from "@/shared/utils/formatDateTime";
 
 const categories = [
     { id: "1", name: "Уход за лицом" },
@@ -69,9 +70,12 @@ export const Main = () => {
                         <Text c="red" fw={700} ta="center" size="lg">Произошла ошибка при загрузке новостей/акций</Text>
                     ) : cards.map(n => (
                         <Card key={n.id} classNames={{root: styles.newsCard}} padding="md">
-                            <Badge classNames={{root: n.type === "PROMO" ? styles.badgePromo : styles.badgeNews}}>
-                                {n.type === "PROMO" ? "Акция" : "Новость"}
-                            </Badge>
+                            <Group justify="space-between">
+                                <Badge classNames={{root: n.type === "PROMO" ? styles.badgePromo : styles.badgeNews}}>
+                                    {n.type === "PROMO" ? "Акция" : "Новость"}
+                                </Badge>
+                                <Text c="dimmed">{formatDateTime(n.createdAt)}</Text>
+                            </Group>
                             <Text classNames={{root: styles.newsTitle}}>{n.title}</Text>
                         </Card>
                     ))}

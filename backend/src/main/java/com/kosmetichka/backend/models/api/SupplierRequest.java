@@ -12,6 +12,5 @@ import lombok.experimental.SuperBuilder;
 @Entity
 @DiscriminatorValue("SUPPLIER_REQUEST")
 public class SupplierRequest extends Appeal {
-    @Column(nullable = false)
     private String companyName;
 }

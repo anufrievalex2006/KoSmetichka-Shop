@@ -1,4 +1,4 @@
-import { ClientQuestionCreateDto, IAppealRepo, SupplierRequestCreateDto } from "@/domain";
+import { AppealUpdateDto, ClientQuestionCreateDto, IAppealRepo, SupplierRequestCreateDto } from "@/domain";
 import { notifications } from "@mantine/notifications";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -73,4 +73,33 @@ export const useCreateSupplierRequest = (repo: IAppealRepo) => {
     });
 
     return create;
+}
+
+export const useUpdateAppealStatus = (id: string, repo: IAppealRepo) => {
+    const queryClient = useQueryClient();
+
+    const change = useMutation({
+        mutationFn: (req: AppealUpdateDto) => repo.updateStatus(id, req),
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ["appeals"]
+            });
+            notifications.show({
+                title: "Успех",
+                message: "Статус успешно обновлен",
+                color: "green",
+                position: "top-right"
+            });
+        },
+        onError: () => {
+            notifications.show({
+                title: "Ошибка",
+                message: "Ошибка обновления статуса",
+                color: "red",
+                position: "top-right"
+            });
+        }
+    });
+
+    return change;
 }
