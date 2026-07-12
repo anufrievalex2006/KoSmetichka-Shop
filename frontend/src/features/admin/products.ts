@@ -32,6 +32,30 @@ export const useProductsList = (
     };
 }
 
+export const useProductsSearch = (filters: ProductFilterParams, repo: IProductRepo) => {
+    const {data, isLoading, isFetching, error} = useQuery({
+        queryKey: ["products", "search", filters],
+        queryFn: async () => {
+            const res = await repo.getAll(filters);
+            return res;
+        },
+        enabled: !!filters.search
+    });
+
+    return {
+        products: data?.content,
+        pagination: {
+            page: data?.page,
+            totalPages: data?.totalPages,
+            totalElements: data?.totalElements,
+            isLast: data?.last
+        },
+        isLoading,
+        isFetching,
+        error
+    };
+}
+
 export const useProductDetails = (id: string, repo: IProductRepo) => {
     const {data: product, isLoading} = useQuery({
         queryKey: ["products", id],

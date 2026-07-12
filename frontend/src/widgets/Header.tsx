@@ -3,7 +3,7 @@ import styles from "@/shared/styles/header.module.scss";
 import { IconMenu2, IconSearch, IconShoppingCart, IconUser } from "@tabler/icons-react";
 import { ActionIcon, Drawer, Group, Stack, TextInput, Title } from "@mantine/core";
 import Link from "next/link";
-import { useState } from "react";
+import { KeyboardEvent, useState } from "react";
 import { UserRepo } from "@/data/repos/UserRepo";
 import { useAuthCheck } from "@/features/auth";
 import { useRouter } from "next/navigation";
@@ -23,6 +23,13 @@ export const Header = () => {
     const {isAuthorized} = useAuthCheck(repo);
     const [open, setOpen] = useState(false);
     const onProfileClick = () => nav.push(isAuthorized ? "/profile" : "/login");
+    const onSearch = (e: KeyboardEvent<HTMLInputElement>) => {
+        if (e.key !== "Enter") return;
+
+        const value = e.currentTarget.value.trim();
+        if (value)
+            nav.push(`/search?search=${encodeURIComponent(value)}`);
+    }
     return (
         <header className={styles.header}>
             <Group classNames={{root: styles.headerTop}}>
@@ -37,7 +44,7 @@ export const Header = () => {
                 <TextInput placeholder="Найти товар по названию/артикулу" classNames={{
                     root: styles.search,
                     input: styles.searchInput
-                }} leftSection={<IconSearch size={18}></IconSearch>}></TextInput>
+                }} leftSection={<IconSearch size={18}></IconSearch>} onKeyDown={onSearch}></TextInput>
                 <Group gap="sm" wrap="nowrap">
                     <ActionIcon variant="subtle" size="xl">
                         <IconShoppingCart size={22}></IconShoppingCart>
