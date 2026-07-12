@@ -1,0 +1,72 @@
+@use "@/shared/styles/vars" as *;
+@use "@/shared/styles/mixins" as *;
+@use "@/shared/styles/fonts" as *;
+
+.container {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    min-height: 100vh;
+    background-color: $bg-primary;
+    color: $text-primary;
+}
+
+.pageTitle {
+    @include h1;
+    @include mobile {
+        @include h1-mobile;
+    }
+}
+
+.wrap {
+    margin-inline: auto;
+    width: 75%;
+    gap: 45px;
+}
+
+.thumb {
+    position: relative;
+    overflow: hidden;
+    width: 80px;
+    aspect-ratio: 1;
+    background-color: $color-100;
+    border-radius: 8px;
+    margin-bottom: 12px;
+}
+
+.entryTitle {
+    @include p2;
+    @include mobile {
+        @include p2-mobile;
+    }
+    font-size: 16px;
+}
+.entryValue {
+    @include p1;
+    @include mobile {
+        @include p1-mobile;
+    }
+    font-size: 18px;
+}
+
+.posPrice {
+    @include h4;
+    @include mobile {
+        @include h4-mobile;
+    }
+    color: $color-900;
+    font-weight: 700;
+    text-align: right;
+}
+
+.totalPrice {
+    @include h2;
+    @include mobile {
+        @include h2-mobile;
+    }
+
+    & span {
+        color: $color-700;
+        font-weight: 700;
+    }
+}

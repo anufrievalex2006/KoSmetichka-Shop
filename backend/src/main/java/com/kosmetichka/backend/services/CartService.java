@@ -15,17 +15,20 @@ import com.kosmetichka.backend.utilities.exceptions.NotFoundException;
 import com.kosmetichka.backend.utilities.mappers.CartMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class CartService {
     private final CartRepo repo;
     private final CartPositionRepo posRepo;
     private final ProductRepo pRepo;
     private final CartMapper mapper;
 
+    @Transactional(readOnly = true)
     public CartResponse getCart(UserPrincipal p) {
         Cart c = repo.findByUserId(p.getId())
                 .orElseThrow(() -> new NotFoundException("Корзина не найдена"));

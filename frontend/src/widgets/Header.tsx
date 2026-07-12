@@ -1,12 +1,14 @@
 "use client";
 import styles from "@/shared/styles/header.module.scss";
 import { IconMenu2, IconSearch, IconShoppingCart, IconUser } from "@tabler/icons-react";
-import { ActionIcon, Drawer, Group, Stack, TextInput, Title } from "@mantine/core";
+import { ActionIcon, Drawer, Group, Indicator, Stack, TextInput, Title } from "@mantine/core";
 import Link from "next/link";
 import { KeyboardEvent, useState } from "react";
 import { UserRepo } from "@/data/repos/UserRepo";
 import { useAuthCheck } from "@/features/auth";
 import { useRouter } from "next/navigation";
+import { CartRepo } from "@/data/repos/CartRepo";
+import { useCart } from "@/features/cart";
 
 const links = [
     { label: "Главная", href: "/" },
@@ -16,10 +18,13 @@ const links = [
     { label: "Контакты", href: "/contacts" },
 ]
 
+const cRepo = new CartRepo();
 const repo = new UserRepo();
 
 export const Header = () => {
     const nav = useRouter();
+    const {cart} = useCart(cRepo);
+    const kItems = cart?.positions.reduce((sum,p) => sum + p.quantity, 0) ?? 0;
     const {isAuthorized} = useAuthCheck(repo);
     const [open, setOpen] = useState(false);
     const onProfileClick = () => nav.push(isAuthorized ? "/profile" : "/login");
@@ -46,8 +51,10 @@ export const Header = () => {
                     input: styles.searchInput
                 }} leftSection={<IconSearch size={18}></IconSearch>} onKeyDown={onSearch}></TextInput>
                 <Group gap="sm" wrap="nowrap">
-                    <ActionIcon variant="subtle" size="xl">
-                        <IconShoppingCart size={22}></IconShoppingCart>
+                    <ActionIcon variant="subtle" size="xl" onClick={() => nav.push("/cart")}>
+                        <Indicator label={kItems} size={16} disabled={kItems === 0} color="red">
+                            <IconShoppingCart size={22}></IconShoppingCart>
+                        </Indicator>
                     </ActionIcon>
                     <ActionIcon variant="subtle" size="xl" onClick={onProfileClick}>
                         <IconUser size={22}></IconUser>
