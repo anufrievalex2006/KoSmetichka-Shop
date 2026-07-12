@@ -19,6 +19,7 @@ public class ProductCreateDto {
     private String barCodeNumber;
     private String article;
     private String description;
+    private String photoUrl;
     @NotNull(message = "Введите количество товара")
     @Min(value = 0, message = "Количество товара не может быть отрицательным")
     private Integer quantity;

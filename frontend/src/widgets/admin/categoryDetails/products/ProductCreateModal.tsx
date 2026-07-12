@@ -1,15 +1,22 @@
 import { AttributeRepo } from "@/data/repos/AttributeRepo";
 import { BrandRepo } from "@/data/repos/BrandRepo";
+import { FileRepo } from "@/data/repos/FileRepo";
 import { ProductRepo } from "@/data/repos/ProductRepo";
 import { CreateProductForm, createProductSchema } from "@/domain/schemas/admin/products/create";
 import { useCategoryAttributes } from "@/features/admin/attributes";
 import { useBrandsList } from "@/features/admin/brand";
 import { useCreateProduct } from "@/features/admin/products";
+import { useUploadFile } from "@/features/files";
 import styles from "@/shared/styles/admin/products.module.scss";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, Group, Loader, Modal, NumberInput, Select, Stack, Textarea, TextInput } from "@mantine/core";
-import { useEffect } from "react";
+import { Button, FileButton, Group, Loader, Modal, NumberInput, Select, Stack, Text, Textarea, TextInput } from "@mantine/core";
+import Image from "next/image";
+import noImage from "@/assets/no-image.png";
+import { useEffect, useState } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
+
+const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
+const MAX_SIZE = 5 * 1024 * 1024;
 
 const classes = {
     root: styles.field,
@@ -27,11 +34,16 @@ interface Props {
 const repo = new ProductRepo();
 const bRepo = new BrandRepo();
 const aRepo = new AttributeRepo();
+const fRepo = new FileRepo();
 
 export const ProductCreateModal = ({opened, onClose, categoryId}: Props) => {
     const create = useCreateProduct(repo);
     const {brands} = useBrandsList(bRepo);
     const {attributes, isLoading: areAttribsLoading} = useCategoryAttributes(categoryId, aRepo);
+    const upload = useUploadFile(fRepo);
+    const [file, setFile] = useState<File | null>(null);
+    const [preview, setPreview] = useState<string | null>(null);
+    const [fileError, setFileError] = useState<string | null>(null);
 
     const form = useForm<CreateProductForm>({
         defaultValues: {
@@ -39,6 +51,7 @@ export const ProductCreateModal = ({opened, onClose, categoryId}: Props) => {
             barCodeNumber: "",
             article: "",
             description: undefined,
+            photoUrl: undefined,
             quantity: 0,
             price: 0,
             categoryId,
@@ -47,6 +60,12 @@ export const ProductCreateModal = ({opened, onClose, categoryId}: Props) => {
         },
         resolver: zodResolver(createProductSchema(attributes ?? []))
     });
+    useEffect(() => {
+        return () => {
+            if (preview)
+                URL.revokeObjectURL(preview);
+        };
+    }, [preview]);
     const {fields} = useFieldArray({
         control: form.control,
         name: "attributeValues"
@@ -59,12 +78,46 @@ export const ProductCreateModal = ({opened, onClose, categoryId}: Props) => {
             })));
         }
     }, [attributes, form]);
-    const onSubmit = (data: CreateProductForm) => {
-        create.mutate(data, {
-            onSuccess: () => {
-                form.reset();
-                onClose();
+    const handleFile = (f: File | null) => {
+        setFileError(null);
+        if (!f) return;
+
+        if (!ALLOWED_TYPES.includes(f.type)) {
+            setFileError("Разрешены только изображения форматов .png, .jpeg или .webp");
+            return;
+        }        
+        if (f.size > MAX_SIZE) {
+            setFileError("Размер файла не должен превышать 5 МБ");
+            return;
+        }
+
+        setFile(f);
+        setPreview(URL.createObjectURL(f));
+    }
+    const onReset = () => {
+        form.reset();
+        setFile(null);
+        setPreview(null);
+        setFileError(null);
+    }
+    const handleClose = () => {
+        onReset();
+        onClose();
+    }
+    const onSubmit = async (data: CreateProductForm) => {
+        let url = data.photoUrl;
+        if (file) {
+            try {
+                url = await upload.mutateAsync(file);
             }
+            catch {
+                setFileError("Не удалось загрузить логотип, попробуйте еще раз");
+                return;
+            }
+        }
+
+        create.mutate({...data, photoUrl: url}, {
+            onSuccess: handleClose
         });
     }
     return (
@@ -133,6 +186,23 @@ export const ProductCreateModal = ({opened, onClose, categoryId}: Props) => {
                             } error={error}></TextInput>
                         )
                     })}
+                    <div className={styles.logoPreviewWrap}>
+                        <Image alt="Логотип производителя" className={
+                            styles.logoPreview
+                        } fill src={preview || noImage}></Image>
+                    </div>
+                    {fileError && (
+                        <Text c="red" size="sm">{fileError}</Text>
+                    )}
+                    <Group>
+                        <FileButton onChange={handleFile} accept="image/jpeg,image/png,image/webp">
+                            {(props) => (
+                                <Button fullWidth classNames={{
+                                    root: styles.addBtn
+                                }} variant="outline" {...props}>Выбрать логотип</Button>
+                            )}
+                        </FileButton>
+                    </Group>
                     <Group grow>
                         <Button type="submit" classNames={{
                             root: styles.submitBtn

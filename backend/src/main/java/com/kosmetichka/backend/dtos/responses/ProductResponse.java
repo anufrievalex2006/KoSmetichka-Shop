@@ -22,6 +22,10 @@ public class ProductResponse {
     private String article;
     @Schema(nullable = true)
     private String description;
+    @Schema(nullable = true)
+    private String photoUrl;
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
+    private boolean inStock;
     @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
     private Integer quantity;
     @Schema(requiredMode = Schema.RequiredMode.REQUIRED)

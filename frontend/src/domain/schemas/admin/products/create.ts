@@ -6,6 +6,7 @@ export const createProductSchema = (attributes: AttributeDto[]) => z.object({
     barCodeNumber: z.string().optional(),
     article: z.string().optional(),
     description: z.string().optional(),
+    photoUrl: z.string().optional(),
     quantity: z.number("Введите количество товара").min(0, "Количество товара не может быть отрицательным"),
     price: z.number("Введите цену товара").min(0, "Цена товара не может быть отрицательной"),
     categoryId: z.string().min(1, "Выберите категорию товара"),

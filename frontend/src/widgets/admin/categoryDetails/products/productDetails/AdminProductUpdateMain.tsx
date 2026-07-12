@@ -1,17 +1,21 @@
-import { Button, Group, Loader, NumberInput, Select, Stack, Text, Textarea, TextInput, Title } from "@mantine/core"
+import { Button, FileButton, Group, Loader, NumberInput, Select, Stack, Text, Textarea, TextInput, Title } from "@mantine/core"
 import styles from "@/shared/styles/admin/products.module.scss";
 import { ProductRepo } from "@/data/repos/ProductRepo";
 import { useProductDetails, useUpdateProduct } from "@/features/admin/products";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { UpdateProductForm, updateProductSchema } from "@/domain/schemas/admin/products/update";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
-import { fields } from "@hookform/resolvers/ajv/src/__tests__/__fixtures__/data.js";
-import { create } from "domain";
+import { useEffect, useState } from "react";
 import { BrandRepo } from "@/data/repos/BrandRepo";
-import { AttributeRepo } from "@/data/repos/AttributeRepo";
 import { useBrandsList } from "@/features/admin/brand";
 import { useRouter } from "next/navigation";
+import { FileRepo } from "@/data/repos/FileRepo";
+import { useUploadFile } from "@/features/files";
+import noImage from "@/assets/no-image.png";
+import Image from "next/image";
+
+const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
+const MAX_SIZE = 5 * 1024 * 1024;
 
 const classes = {
     root: styles.field,
@@ -26,10 +30,16 @@ interface Props {
 
 const repo = new ProductRepo();
 const bRepo = new BrandRepo();
+const fRepo = new FileRepo();
 
 export const AdminProductUpdateMain = ({id}: Props) => {
     const nav = useRouter();
     const {product, isLoading} = useProductDetails(id, repo);
+    const upload = useUploadFile(fRepo);
+    const [file, setFile] = useState<File | null>(null);
+    const [preview, setPreview] = useState<string | null>(null);
+    const [fileError, setFileError] = useState<string | null>(null);
+    
     const {brands} = useBrandsList(bRepo);
     const attributes = product?.attributeValues.map(a => a.attribute);
     const update = useUpdateProduct(repo);
@@ -39,6 +49,7 @@ export const AdminProductUpdateMain = ({id}: Props) => {
             barCodeNumber: "",
             article: "",
             description: undefined,
+            photoUrl: undefined,
             quantity: 0,
             price: 0,
             categoryId: "",
@@ -47,6 +58,12 @@ export const AdminProductUpdateMain = ({id}: Props) => {
         },
         resolver: zodResolver(updateProductSchema(attributes ?? []))
     });
+    useEffect(() => {
+        return () => {
+            if (preview)
+                URL.revokeObjectURL(preview);
+        };
+    }, [preview]);
     const {fields} = useFieldArray({
         control: form.control,
         name: "attributeValues"
@@ -58,6 +75,7 @@ export const AdminProductUpdateMain = ({id}: Props) => {
                 barCodeNumber: product.barCodeNumber ?? undefined,
                 article: product.article ?? undefined,
                 description: product.description ?? undefined,
+                photoUrl: product.photoUrl ?? undefined,
                 quantity: product.quantity,
                 price: product.price,
                 categoryId: product.category.id,
@@ -69,16 +87,53 @@ export const AdminProductUpdateMain = ({id}: Props) => {
             });
         }
     }, [product, form]);
-    const onSubmit = (data: UpdateProductForm) => {
+    const handleFile = (f: File | null) => {
+        setFileError(null);
+        if (!f) return;
+
+        if (!ALLOWED_TYPES.includes(f.type)) {
+            setFileError("Разрешены только изображения форматов .png, .jpeg или .webp");
+            return;
+        }        
+        if (f.size > MAX_SIZE) {
+            setFileError("Размер файла не должен превышать 5 МБ");
+            return;
+        }
+
+        setFile(f);
+        setPreview(URL.createObjectURL(f));
+    }
+    const onReset = () => {
+        form.reset();
+        setFile(null);
+        setPreview(null);
+        setFileError(null);
+    }
+    const handleClose = () => {
+        onReset();
+        nav.push(`/admin/categories/${product?.category.id}`);
+    }
+    const onSubmit = async (data: UpdateProductForm) => {
+        let url = data.photoUrl;
+        if (file) {
+            try {
+                url = await upload.mutateAsync(file);
+            }
+            catch {
+                setFileError("Не удалось загрузить логотип, попробуйте еще раз");
+                return;
+            }
+        }
+
         update.mutate({
             id: product!.id,
-            req: data
+            req: {
+                ...data,
+                photoUrl: url
+            },
         }, {
-            onSuccess: () => {
-                form.reset();
-                nav.push(`/admin/categories/${product?.category.id}`);
-            }
-        })
+            onSuccess: handleClose
+        });
     }
     return isLoading ? (
         <Group gap="md" justify="center">
@@ -152,6 +207,25 @@ export const AdminProductUpdateMain = ({id}: Props) => {
                             } error={error}></TextInput>
                         )
                     })}
+                    <Group gap="md">
+                        <div className={styles.logoPreviewWrap}>
+                            <Image alt="Логотип производителя" className={
+                                styles.logoPreview
+                            } fill src={preview || noImage}></Image>
+                        </div>
+                        <Group>
+                            <FileButton onChange={handleFile} accept="image/jpeg,image/png,image/webp">
+                                {(props) => (
+                                    <Button classNames={{
+                                        root: styles.addBtn
+                                    }} variant="outline" {...props}>Выбрать логотип</Button>
+                                )}
+                            </FileButton>
+                        </Group>
+                    </Group>
+                    {fileError && (
+                        <Text c="red" size="sm">{fileError}</Text>
+                    )}
                     <Group grow>
                         <Button type="submit" classNames={{
                             root: styles.submitBtn

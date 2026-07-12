@@ -147,6 +147,8 @@
 }
 
 .productImgPlaceholder {
+    position: relative;
+    overflow: hidden;
     width: 100%;
     aspect-ratio: 1;
     background-color: $color-100;

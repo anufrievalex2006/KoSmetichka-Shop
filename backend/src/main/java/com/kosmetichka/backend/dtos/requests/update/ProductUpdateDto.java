@@ -19,6 +19,7 @@ public class ProductUpdateDto {
     private String barCodeNumber;
     private String article;
     private String description;
+    private String photoUrl;
     @Min(value = 0, message = "Количество товара должно быть больше нуля")
     private Integer quantity;
     @DecimalMin(value = "0.0", inclusive = false, message = "Цена товара должна быть больше нуля")

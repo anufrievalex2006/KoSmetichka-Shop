@@ -610,6 +610,7 @@ export interface components {
             barCodeNumber?: string;
             article?: string;
             description?: string;
+            photoUrl?: string;
             /** Format: int32 */
             quantity: number;
             price: number;
@@ -654,6 +655,8 @@ export interface components {
             barCodeNumber?: string | null;
             article?: string | null;
             description?: string | null;
+            photoUrl?: string | null;
+            inStock: boolean;
             /** Format: int32 */
             quantity: number;
             price: number;
@@ -837,6 +840,7 @@ export interface components {
             barCodeNumber?: string;
             article?: string;
             description?: string;
+            photoUrl?: string;
             /** Format: int32 */
             quantity?: number;
             price?: number;

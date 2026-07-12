@@ -27,6 +27,7 @@ public class Product {
     private String article;
     @Column(columnDefinition = "TEXT")
     private String description;
+    private String photoUrl;
     @Column(nullable = false)
     private Integer quantity;
     @Column(nullable = false, precision = 10, scale = 2)
@@ -40,4 +41,9 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<AttributeValue> attributeValues = new ArrayList<>();
+
+    @Transient
+    public boolean isInStock() {
+        return quantity != null && quantity > 0;
+    }
 }

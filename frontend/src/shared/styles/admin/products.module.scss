@@ -151,3 +151,24 @@
     }
     font-size: 18px;
 }
+
+.logoPreviewWrap {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    align-self: center;
+    border: 1px solid $border;
+    border-radius: 8px;
+    overflow: hidden;
+}
+.logoPreview {
+    object-fit: contain;
+    padding: 8px;
+}
+.logo {
+    object-fit: contain;
+    width: 300px;
+    height: 250px;
+    border: 1px solid $border;
+    border-radius: 8px;
+}

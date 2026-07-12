@@ -2,13 +2,10 @@ import { ActionIcon, Divider, Group, Loader, Stack, Text, Title } from "@mantine
 import styles from "@/shared/styles/admin/products.module.scss";
 import { ProductRepo } from "@/data/repos/ProductRepo";
 import { useDeleteProduct, useProductDetails } from "@/features/admin/products";
-import { BrandRepo } from "@/data/repos/BrandRepo";
-import { AttributeRepo } from "@/data/repos/AttributeRepo";
-import { useBrandsList } from "@/features/admin/brand";
-import { useCategoryAttributes } from "@/features/admin/attributes";
 import { Fragment } from "react/jsx-runtime";
 import { IconPencil, IconTrash } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 interface Props {
     id: string;
@@ -66,6 +63,17 @@ export const AdminProductDetailsMain = ({id}: Props) => {
                             <Text classNames={{root: styles.entryValue}}>{product.brand.name}</Text>
                         </Stack>
                     </Group>
+                    <Divider></Divider>
+                    <Stack gap={8}>
+                        <Text classNames={{root: styles.entryTitle}}>Фотография к товару</Text>
+                        {!product.photoUrl ? (
+                            <Text classNames={{root: styles.entryValue}}>Нет</Text>
+                        ) : (
+                            <Image alt="Фотография к товару" className={styles.logo} src={
+                                product.photoUrl
+                            } width={300} height={250}></Image>
+                        )}
+                    </Stack>
                     <Divider></Divider>
                     <Stack gap={8}>
                         <Text classNames={{root: styles.entryTitle}}>Артикул</Text>
