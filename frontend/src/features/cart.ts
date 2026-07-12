@@ -49,8 +49,10 @@ export const useUpdateCartPosition = (repo: ICartRepo) => {
 
     const update = useMutation({
         mutationFn: ({id, req}: UpdateProps) => repo.updatePosition(id, req),
-        onSuccess: (cart) => {
-            queryClient.setQueryData(["cart"], cart);
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ["cart"]
+            });
         },
         onError: () => {
             notifications.show({
@@ -70,8 +72,10 @@ export const useDeleteCartPosition = (repo: ICartRepo) => {
 
     const deleteMut = useMutation({
         mutationFn: (id: string) => repo.deletePosition(id),
-        onSuccess: (cart) => {
-            queryClient.setQueryData(["cart"], cart);
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ["cart"]
+            });
         },
         onError: () => {
             notifications.show({
@@ -92,7 +96,9 @@ export const useClearCart = (repo: ICartRepo) => {
     const clear = useMutation({
         mutationFn: () => repo.clearCart(),
         onSuccess: () => {
-            queryClient.setQueryData(["cart"], undefined);
+            queryClient.invalidateQueries({
+                queryKey: ["cart"]
+            });
         },
         onError: () => {
             notifications.show({

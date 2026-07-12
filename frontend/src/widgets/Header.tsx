@@ -24,7 +24,7 @@ const repo = new UserRepo();
 export const Header = () => {
     const nav = useRouter();
     const {cart} = useCart(cRepo);
-    const kItems = cart?.positions.reduce((sum,p) => sum + p.quantity, 0) ?? 0;
+    const kItems = cart?.positions.length ?? 0;
     const {isAuthorized} = useAuthCheck(repo);
     const [open, setOpen] = useState(false);
     const onProfileClick = () => nav.push(isAuthorized ? "/profile" : "/login");

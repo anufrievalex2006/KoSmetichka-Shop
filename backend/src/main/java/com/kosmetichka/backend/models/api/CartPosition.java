@@ -2,8 +2,10 @@ package com.kosmetichka.backend.models.api;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.UUID;
 
 @Builder
@@ -27,4 +29,7 @@ public class CartPosition {
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
+    private Instant createdAt;
 }

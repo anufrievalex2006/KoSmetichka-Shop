@@ -179,3 +179,12 @@
     }
     color: $color-700;
 }
+
+.addToCartBtn {
+    @include button;
+    @include mobile {
+        @include button-mobile;
+    }
+    background-color: $success;
+    color: $text-light;
+}

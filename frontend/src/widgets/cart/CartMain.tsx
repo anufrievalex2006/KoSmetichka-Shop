@@ -11,6 +11,19 @@ export const CartMain = () => {
     const {cart, isLoading} = useCart(repo);
     const update = useUpdateCartPosition(repo), del = useDeleteCartPosition(repo);
     const clear = useClearCart(repo);
+
+    const onClearCart = () => {
+        if (confirm("Вы уверены, что хотите очистить корзину?"))
+            clear.mutate();
+    }
+    const onDeleteProduct = (id: string) => {
+        if (confirm("Вы уверены, что хотите удалить товар?"))
+            del.mutate(id);
+    }
+    const onDeleteProductNeg = (id: string) => {
+        if (confirm("Поскольку у вас количество товара равно 1, то уменьшение количества приведет к удалению товара из корзины. Вы уверены?"))
+            del.mutate(id);
+    }
     return isLoading ? (
         <Group gap="md" justify="center">
             <Loader size="lg"></Loader>
@@ -23,14 +36,14 @@ export const CartMain = () => {
                 {!!cart?.positions.length && (
                     <Button variant="outline" color="red" leftSection={
                         <IconTrash size={18}></IconTrash>
-                    } loading={clear.isPending} onClick={() => clear.mutate()}>Очистить корзину</Button>
+                    } loading={clear.isPending} onClick={onClearCart}>Очистить корзину</Button>
                 )}
             </Group>
             {!cart?.positions.length ? (
                 <Text c="blue" fw={700} ta="center" size="lg">Здесь пока пусто!</Text>
             ) : (
-                <>
-                    <Stack gap="md" classNames={{root: styles.wrap}}>
+                <Stack classNames={{root: styles.wrap}}>
+                    <Stack gap="md" classNames={{root: styles.cartDiv}}>
                         {cart.positions.map(p => {
                             const atStockLimit = p.quantity >= p.product.quantity;
                             return (
@@ -51,7 +64,7 @@ export const CartMain = () => {
                                     <Group gap="sm" wrap="nowrap">
                                         <ActionIcon size="lg" variant="outline" disabled={
                                             update.isPending || del.isPending
-                                        } onClick={() => p.quantity <= 1 ? del.mutate(p.id) : update.mutate({
+                                        } onClick={() => p.quantity <= 1 ? onDeleteProductNeg(p.id) : update.mutate({
                                             id: p.id,
                                             req: {
                                                 quantity: p.quantity - 1
@@ -61,7 +74,7 @@ export const CartMain = () => {
                                         </ActionIcon>
                                         <Text classNames={{root: styles.entryValue}} ta="center">{p.quantity}</Text>
                                         <ActionIcon size="lg" variant="outline" disabled={
-                                            update.isPending || del.isPending
+                                            update.isPending || atStockLimit
                                         } onClick={() => update.mutate({
                                             id: p.id,
                                             req: {
@@ -74,20 +87,19 @@ export const CartMain = () => {
                                     <Text classNames={{root: styles.posPrice}}>{p.price * p.quantity} руб.</Text>
                                     <ActionIcon size="lg" color="red" variant="subtle" loading={
                                         del.isPending
-                                    } onClick={() => del.mutate(p.id)}>
+                                    } onClick={() => onDeleteProduct(p.id)}>
                                         <IconTrash size={18}></IconTrash>
                                     </ActionIcon>
                                 </Group>
                             );
                         })}
                     </Stack>
-                    <Divider></Divider>
                     <Group justify="flex-end">
                         <Title order={2} classNames={{root: styles.totalPrice}}>
                             Итого: <span>{cart.total}</span> руб.
                         </Title>
                     </Group>
-                </>
+                </Stack>
             )}
         </Stack>
     )

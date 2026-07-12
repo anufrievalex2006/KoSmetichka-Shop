@@ -70,7 +70,7 @@ export const CategoryProductCard = ({product}: Props) => {
             ) : !pos ? (
                 <Button fullWidth mt="sm" loading={addToCart.isPending} leftSection={
                     <IconShoppingCartPlus size={18}></IconShoppingCartPlus>
-                } onClick={onPlus}>Добавить в корзину</Button>
+                } onClick={onPlus} classNames={{root: styles.addToCartBtn}}>Добавить в корзину</Button>
             ) : (
                 <Group justify="center" gap="sm" mt="sm" wrap="nowrap">
                     <ActionIcon size="lg" variant="outline" disabled={isPending} onClick={onMinus}>

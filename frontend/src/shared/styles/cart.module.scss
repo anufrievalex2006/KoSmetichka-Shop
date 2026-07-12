@@ -20,8 +20,14 @@
 
 .wrap {
     margin-inline: auto;
-    width: 75%;
+    width: 85%;
     gap: 45px;
+}
+
+.cartDiv {
+    border-radius: 8px;
+    border: 1px solid $border;
+    padding: 16px;
 }
 
 .thumb {

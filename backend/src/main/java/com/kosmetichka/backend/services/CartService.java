@@ -64,12 +64,16 @@ public class CartService {
         return getCart(pr);
     }
     public CartResponse deletePosition(UserPrincipal pr, UUID posId) {
-        CartPosition p = posRepo.findById(posId)
+        Cart c = repo.findByUserId(pr.getId())
+                .orElseThrow(() -> new NotFoundException("Корзина не найдена"));
+        CartPosition p = c.getPositions().stream()
+                .filter(x -> x.getId().equals(posId))
+                .findFirst()
                 .orElseThrow(() -> new NotFoundException("Позиция корзины не найдена"));
-        if (!p.getCart().getUser().getId().equals(pr.getId()))
-            throw new ForbiddenException("У вас нет прав на удаление товара из корзины");
-        posRepo.delete(p);
-        return getCart(pr);
+
+        c.getPositions().remove(p);
+        repo.save(c);
+        return mapper.toResponse(c);
     }
     public void clearCart(UserPrincipal pr) {
         Cart c = repo.findByUserId(pr.getId())
