@@ -13,6 +13,7 @@ import { AttributeFilterField } from "./AttributeFilterField";
 import { ProductCard } from "./ProductCard";
 import { ProductCreateModal } from "./ProductCreateModal";
 import { useDisclosure } from "@mantine/hooks";
+import { AttributeFilterValue } from "@/domain";
 
 interface Props {
     categoryId: string;
@@ -39,7 +40,7 @@ export const AdminProductsMain = ({categoryId}: Props) => {
         close: closeCreateProductModal
     }] = useDisclosure(false);
     
-    const setAttrFilter = (attrId: string, value: string | null) => {
+    const setAttrFilter = (attrId: string, value: AttributeFilterValue | undefined) => {
         const next = {...filters.attributes};
         if (value)
             next[attrId] = value;
@@ -152,7 +153,7 @@ export const AdminProductsMain = ({categoryId}: Props) => {
                             </Group>
                             {attributes?.map(attr => (
                                 <AttributeFilterField key={attr.id} attribute={attr} value={
-                                    filters.attributes?.[attr.id] ?? ""
+                                    filters.attributes?.[attr.id]
                                 } onChange={
                                     (x) => setAttrFilter(attr.id, x)
                                 }></AttributeFilterField>

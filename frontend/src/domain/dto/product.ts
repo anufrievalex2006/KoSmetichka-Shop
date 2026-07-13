@@ -5,6 +5,12 @@ export type ProductDtoPagedList = components["schemas"]["PageResponseProductResp
 export type ProductCreateDto = components["schemas"]["ProductCreateDto"];
 export type ProductUpdateDto = components["schemas"]["ProductUpdateDto"];
 
+export interface AttributeFilterValue {
+    value?: string;
+    min?: string;
+    max?: string;
+}
+
 export interface ProductFilterParams {
     search?: string;
     categoryId?: string;
@@ -14,5 +20,5 @@ export interface ProductFilterParams {
     page?: number;
     size?: number;
     sort?: string[];
-    attributes?: Record<string, string>;
+    attributes?: Record<string, AttributeFilterValue>;
 }

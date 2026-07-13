@@ -16,5 +16,5 @@ public class ProductFilterDto {
     private UUID brandId;
     private BigDecimal minPrice;
     private BigDecimal maxPrice;
-    private Map<UUID, String> attributes;
+    private Map<UUID, AttributeFilterDto> attributes;
 }

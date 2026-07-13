@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kosmetichka.backend.dtos.requests.create.ProductCreateDto;
+import com.kosmetichka.backend.dtos.requests.filter.AttributeFilterDto;
 import com.kosmetichka.backend.dtos.requests.filter.ProductFilterDto;
 import com.kosmetichka.backend.dtos.requests.update.ProductUpdateDto;
 import com.kosmetichka.backend.dtos.responses.PageResponse;
@@ -73,13 +74,13 @@ public class ProductController {
         return ResponseEntity.noContent().build();
     }
 
-    private Map<UUID, String> parse(String raw) {
+    private Map<UUID, AttributeFilterDto> parse(String raw) {
         if (raw == null || raw.isBlank())
             return null;
 
-        Map<String, String> res;
+        Map<String, AttributeFilterDto> res;
         try {
-            res = mapper.readValue(raw, new TypeReference<Map<String, String>>() {});
+            res = mapper.readValue(raw, new TypeReference<Map<String, AttributeFilterDto>>() {});
         } catch (JsonProcessingException e) {
             throw new BadRequestException("Некорректный формат фильтра по атрибутам");
         }

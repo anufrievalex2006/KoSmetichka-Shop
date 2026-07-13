@@ -1,0 +1,87 @@
+@use "@/shared/styles/vars" as *;
+@use "@/shared/styles/mixins" as *;
+@use "@/shared/styles/fonts" as *;
+
+.container {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    min-height: 100vh;
+    background-color: $bg-primary;
+    color: $text-primary;
+}
+
+.pageTitle {
+    @include h1;
+    @include mobile {
+        @include h1-mobile;
+    }
+}
+
+.wrap {
+    margin-inline: auto;
+    width: 75%;
+    align-items: flex-start;
+}
+
+.productImgPlaceholder {
+    position: relative;
+    overflow: hidden;
+    width: min(450px, 100%);
+    aspect-ratio: 0.75;
+    background-color: $color-100;
+    border-radius: 8px;
+    border: 1px solid $border;
+}
+
+.productInfo {
+    border-radius: 8px;
+    border: 1px solid $border;
+    padding: 16px;
+}
+
+.productName {
+    @include h2;
+    @include mobile {
+        @include h2-mobile;
+    }
+}
+
+.productPrice {
+    padding: 8px;
+    border-radius: 16px;
+    background-color: $color-600;
+    @include h3;
+    @include mobile {
+        @include h3-mobile;
+    }
+    color: $text-light;
+    width: fit-content;
+    font-weight: 700;
+}
+
+.entryTitle {
+    @include p2;
+    @include mobile {
+        @include p2-mobile;
+    }
+    font-size: 16px;
+}
+.entryValue {
+    @include p1;
+    @include mobile {
+        @include p1-mobile;
+    }
+    font-size: 18px;
+}
+
+.addToCartBtn {
+    @include button;
+    @include mobile {
+        @include button-mobile;
+    }
+    background-color: $success;
+    color: $text-light;
+    height: 43px;
+    padding: 10px 28px 10px 26px;
+}

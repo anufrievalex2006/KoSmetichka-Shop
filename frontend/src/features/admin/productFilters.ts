@@ -1,11 +1,8 @@
 "use client";
 
-import { ProductFilterParams } from "@/domain";
+import { AttributeFilterValue, ProductFilterParams } from "@/domain";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { SetStateAction, useCallback, useMemo } from "react";
-
-const ATTR_PREFIX = "attr_";
-const SEPARATOR = "|";
 
 export const useProductFilters = () => {
     const nav = useRouter();
@@ -13,12 +10,16 @@ export const useProductFilters = () => {
     const searchParams = useSearchParams();
 
     const filters: ProductFilterParams = useMemo(() => {
-        const attrs: Record<string, string> = {};
-        searchParams.forEach((v,k) => {
-            if (k.startsWith(ATTR_PREFIX)) {
-                attrs[k.slice(ATTR_PREFIX.length)] = v;
+        const raw = searchParams.get("attributes");
+        let attrs: Record<string, AttributeFilterValue> | undefined;
+        if (raw) {
+            try {
+                attrs = JSON.parse(raw);
             }
-        });
+            catch {
+                attrs = undefined;
+            }
+        }
 
         return {
             search: searchParams.get("search") || undefined,
@@ -27,8 +28,8 @@ export const useProductFilters = () => {
             maxPrice: searchParams.get("maxPrice") ? Number(searchParams.get("maxPrice")) : undefined,
             page: parseInt(searchParams.get("page") || "0"),
             size: parseInt(searchParams.get("size") || "10"),
-            sort: searchParams.get("sort")?.split(SEPARATOR) ?? ["name,asc"],
-            attributes: Object.keys(attrs).length ? attrs : undefined
+            sort: searchParams.get("sort")?.split("|") ?? ["name,asc"],
+            attributes: attrs
         };
     }, [searchParams]);
     const setFilters = useCallback((
@@ -38,20 +39,17 @@ export const useProductFilters = () => {
 
         const params = new URLSearchParams(searchParams.toString());
         if ("attributes" in next) {
-            Array.from(params.keys())
-                .filter(k => k.startsWith(ATTR_PREFIX))
-                .forEach(k => params.delete(k));
-            Object.entries(next.attributes ?? {}).forEach(([attrId, value]) => {
-                if (value)
-                    params.set(`${ATTR_PREFIX}${attrId}`, value);
-            });
+            const hasAttrs = next.attributes && Object.keys(next.attributes).length > 0;
+            if (hasAttrs)
+                params.set("attributes", JSON.stringify(next.attributes));
+            else params.delete("attributes");
         }
         Object.entries(next).forEach(([k,v]) => {
             if (k === "attributes") return;
             if (v === undefined || v === null || v === "")
                 params.delete(k);
             else if (k === "sort" && Array.isArray(v))
-                params.set(k, v.join(SEPARATOR));
+                params.set(k, v.join("|"));
             else
                 params.set(k, String(v));
         });
