@@ -1,4 +1,4 @@
-import { IShopRepo, ShopCreateDto, ShopDto, ShopUpdateDto } from "@/domain";
+import { IShopRepo, ShopDto, ShopUpdateDto } from "@/domain";
 import { api } from "../api/axiosInstance";
 
 export class ShopRepo implements IShopRepo {
