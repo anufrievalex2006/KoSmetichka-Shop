@@ -1,5 +1,5 @@
 import { CartRepo } from "@/data/repos/CartRepo";
-import { useCart, useClearCart, useDeleteCartPosition, useUpdateCartPosition } from "@/features/cart";
+import { useCart, useCheckout, useClearCart, useDeleteCartPosition, useUpdateCartPosition } from "@/features/cart";
 import styles from "@/shared/styles/cart.module.scss";
 import { ActionIcon, Button, Divider, Group, Loader, Stack, Text, Title } from "@mantine/core";
 import { IconMinus, IconPlus, IconTrash } from "@tabler/icons-react";
@@ -9,9 +9,14 @@ const repo = new CartRepo();
 
 export const CartMain = () => {
     const {cart, isLoading} = useCart(repo);
+    const checkout = useCheckout(repo);
     const update = useUpdateCartPosition(repo), del = useDeleteCartPosition(repo);
     const clear = useClearCart(repo);
 
+    const onCheckout = () => {
+        if (confirm("Оформить заказ? Чек будет отправлен вам на почту"))
+            checkout.mutate();
+    }
     const onClearCart = () => {
         if (confirm("Вы уверены, что хотите очистить корзину?"))
             clear.mutate();
@@ -98,6 +103,9 @@ export const CartMain = () => {
                         <Title order={2} classNames={{root: styles.totalPrice}}>
                             Итого: <span>{cart.total}</span> руб.
                         </Title>
+                        <Button classNames={{root: styles.addToCartBtn}} loading={checkout.isPending} onClick={onCheckout}>
+                            Оформить заказ
+                        </Button>
                     </Group>
                 </Stack>
             )}

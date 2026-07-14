@@ -75,7 +75,7 @@
     font-size: 18px;
 }
 
-.addToCartBtn {
+.addToCartBtn, .noInStockBtn {
     @include button;
     @include mobile {
         @include button-mobile;
@@ -84,4 +84,10 @@
     color: $text-light;
     height: 43px;
     padding: 10px 28px 10px 26px;
+}
+.noInStockBtn {
+    background-color: $bg-primary;
+    color: $text-danger;
+    border: 1px solid $danger;
+    opacity: 0.8;
 }

@@ -50,7 +50,7 @@ export const LoginMain = () => {
                             label: styles.switchLabel
                         }} onChange={field.onChange} size="md"></Switch>
                     )}></Controller>
-                    <Link href="#" className={styles.forgot}>Забыли пароль?</Link>
+                    <Link href="/forgot-password" className={styles.forgot}>Забыли пароль?</Link>
                     <Button type="submit" classNames={{root: styles.submitBtn}}>Войти в систему</Button>
                     <Button variant="outline" onClick={
                         () => nav.push("/register")

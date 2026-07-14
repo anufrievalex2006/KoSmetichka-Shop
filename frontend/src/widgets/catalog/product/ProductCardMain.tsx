@@ -68,7 +68,7 @@ export const ProductCardMain = ({id}: Props) => {
                             <Text classNames={{root: styles.productPrice}}>{product.price} руб.</Text>
                         </Group>
                         {product.quantity === 0 ? (
-                        <Button disabled fullWidth classNames={{root: styles.addToCartBtn}}>Нет в наличии</Button>
+                        <Button disabled fullWidth variant="outline" classNames={{root: `${styles.noInStockBtn}`}}>Товара нет в наличии</Button>
                     ) : !pos ? (
                         <Button fullWidth loading={addToCart.isPending} leftSection={
                             <IconShoppingCartPlus size={18}></IconShoppingCartPlus>

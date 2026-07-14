@@ -18,6 +18,35 @@ export const useCart = (repo: ICartRepo) => {
     };
 }
 
+export const useCheckout = (repo: ICartRepo) => {
+    const queryClient = useQueryClient();
+
+    const checkout = useMutation({
+        mutationFn: () => repo.checkout(),
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ["cart"]
+            });
+            notifications.show({
+                title: "Заказ оформлен!",
+                message: "Чек с деталями заказа отправлен вам на почту",
+                color: "green",
+                position: "top-right"
+            });
+        },
+        onError: () => {
+            notifications.show({
+                title: "Ошибка",
+                message: "Ошибка оформления заказа",
+                color: "red",
+                position: "top-right"
+            });
+        }
+    });
+
+    return checkout;
+}
+
 export const useAddToCart = (repo: ICartRepo) => {
     const queryClient = useQueryClient();
 

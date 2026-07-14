@@ -28,6 +28,11 @@ public class CartController {
     public ResponseEntity<CartResponse> getCart() {
         return ResponseEntity.ok(service.getCart(principal()));
     }
+    @PostMapping("/checkout")
+    public ResponseEntity<Void> checkout() {
+        service.checkout(principal());
+        return ResponseEntity.noContent().build();
+    }
     @PostMapping("/positions")
     public ResponseEntity<CartResponse> addPosition(@Valid  @RequestBody CartPositionCreateDto req) {
         return ResponseEntity.ok(service.addPosition(principal(), req));

@@ -2,6 +2,7 @@ import { CartDto, CartPositionCreateDto, CartPositionUpdateDto } from "../dto/ca
 
 export interface ICartRepo {
     getCart(): Promise<CartDto>;
+    checkout(): Promise<void>;
     addPosition(req: CartPositionCreateDto): Promise<CartDto>;
     updatePosition(id: string, req: CartPositionUpdateDto): Promise<CartDto>;
     deletePosition(id: string): Promise<CartDto>;

@@ -1,7 +1,7 @@
-import { ForgotPasswordDto, IAuthRepo, IUserRepo, LoginDto, RegisterDto, ResetPasswordDto } from "@/domain";
+import { ForgotPasswordDto, IAuthRepo, IUserRepo, LoginDto, PasswordUpdateDto, RegisterDto, ResetPasswordDto } from "@/domain";
 import { notifications } from "@mantine/notifications";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { notFound, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export const useLogin = (repo: IAuthRepo) => {
     const queryClient = useQueryClient();
@@ -15,7 +15,7 @@ export const useLogin = (repo: IAuthRepo) => {
             });
             notifications.show({
                 title: "Успех",
-                message: "Вы успешны вошли в систему",
+                message: "Вы успешно вошли в систему",
                 color: "green",
                 position: "top-right"
             });
@@ -78,7 +78,7 @@ export const useLogout = (repo: IAuthRepo) => {
             notifications.show({
                 title: "Успех",
                 message: "Вы вышли из системы",
-                color: "blue",
+                color: "green",
                 position: "top-right"
             });
             nav.push("/");
@@ -113,8 +113,6 @@ export const useForgotPassword = (repo: IAuthRepo) => {
 }
 
 export const useResetPassword = (repo: IAuthRepo) => {
-    const nav = useRouter();
-
     const reset = useMutation({
         mutationFn: (req: ResetPasswordDto) => repo.resetPassword(req),
         onSuccess: () => {
@@ -136,6 +134,30 @@ export const useResetPassword = (repo: IAuthRepo) => {
     });
 
     return reset;
+}
+
+export const useChangePassword = (repo: IUserRepo) => {
+    const change = useMutation({
+        mutationFn: (req: PasswordUpdateDto) => repo.changePassword(req),
+        onSuccess: () => {
+            notifications.show({
+                title: "Успех",
+                message: "Пароль успешно изменен",
+                color: "green",
+                position: "top-right"
+            });
+        },
+        onError: () => {
+            notifications.show({
+                title: "Ошибка",
+                message: "Не удалось изменить пароль. Проверьте ваш текущий пароль",
+                color: "red",
+                position: "top-right"
+            });
+        }
+    });
+
+    return change;
 }
 
 export const useAuthCheck = (repo: IUserRepo) => {

@@ -11,6 +11,7 @@ import { UpdateProfileModal } from "./UpdateProfileModal";
 import { useLogout } from "@/features/auth";
 import { AuthRepo } from "@/data/repos/AuthRepo";
 import { useRouter } from "next/navigation";
+import { ChangePasswordModal } from "../changePassword/ChangePasswordMain";
 
 const aRepo = new AuthRepo();
 const repo = new UserRepo();
@@ -26,6 +27,10 @@ export const ProfileMain = () => {
     const [updProfileModalOpened, {
         open: openUpdProfileModal,
         close: closeUpdProfileModal
+    }] = useDisclosure(false);
+    const [passModalOpened, {
+        open: openPassModal,
+        close: closePassModal
     }] = useDisclosure(false);
     return (
         <Stack flex={1} gap="lg" p="xl">
@@ -76,7 +81,7 @@ export const ProfileMain = () => {
                     <Group gap="sm" justify="flex-end">
                         <Button variant="outline" classNames={{root: styles.passBtn}} leftSection={
                             <IconPasswordUser size={18}></IconPasswordUser>
-                        }>Сменить пароль</Button>
+                        } onClick={openPassModal}>Сменить пароль</Button>
                         {profile.role === "ADMIN" && (
                             <Button classNames={{root: styles.adminBtn}} leftSection={
                                 <IconUserKey size={18}></IconUserKey>
@@ -88,6 +93,7 @@ export const ProfileMain = () => {
                     </Group>
                 </>
             )}
+            <ChangePasswordModal opened={passModalOpened} onClose={closePassModal}></ChangePasswordModal>
             <UpdateProfileModal opened={updProfileModalOpened} onClose={closeUpdProfileModal}></UpdateProfileModal>
             <UpdateAvatarModal opened={modalOpened} onClose={closeModal} currentAvatarUrl={profile?.avatarUrl}></UpdateAvatarModal>
         </Stack>

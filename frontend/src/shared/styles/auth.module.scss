@@ -112,3 +112,26 @@
     }
     margin-top: 3px;
 }
+
+.authForm {
+    margin-inline: auto;
+    width: 75%;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid $border;
+    box-shadow: 0 4px 15px $shadow;
+}
+
+.pageTitle {
+    @include h2;
+    @include mobile {
+        @include h2-mobile;
+    }
+}
+
+.p1 {
+    @include p1;
+    @include mobile {
+        @include p1-mobile;
+    }
+}

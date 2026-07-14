@@ -6,6 +6,9 @@ export class CartRepo implements ICartRepo {
         const res = await api.get<CartDto>("/cart");
         return res.data;
     }
+    async checkout(): Promise<void> {
+        await api.post("/cart/checkout");
+    }
     async addPosition(req: CartPositionCreateDto): Promise<CartDto> {
         const res = await api.post<CartDto>("/cart/positions", req);
         return res.data;
