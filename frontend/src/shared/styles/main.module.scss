@@ -1,0 +1,156 @@
+@use "@/shared/styles/vars" as *;
+@use "@/shared/styles/mixins" as *;
+@use "@/shared/styles/fonts" as *;
+
+.container {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    min-height: 100vh;
+    background-color: $bg-primary;
+    color: $text-primary;
+}
+
+.hero {
+    background-color: $color-700;
+    padding: 80px 32px;
+    @include mobile {
+        padding: 48px 24px;
+    }
+}
+
+.heroBadge {
+    background-color: $color-300;
+    color: $text-primary;
+    width: fit-content;
+    font-weight: 700;
+}
+
+.heroTitle {
+    @include h1;
+    @include mobile {
+        @include h1-mobile;
+    }
+    color: $text-light;
+}
+
+.heroTxt {
+    @include p1;
+    @include mobile {
+        @include p1-mobile;
+    }
+    color: $color-100;
+}
+
+.heroButton {
+    background-color: $bg-primary;
+    color: $color-700;
+    width: fit-content;
+    &:hover {
+        background-color: $color-400;
+        color: $text-light;
+    }
+}
+
+.section {
+    padding: 48px 32px;
+    @include mobile {
+        padding: 32px 16px;
+    }
+}
+
+.sectionTitle {
+    @include h2;
+    @include mobile {
+        @include h2-mobile;
+    }
+}
+
+.categoryCard {
+    background-color: $bg-card;
+    border: 1px solid $border;
+    border-radius: 8px;
+    padding: 24px;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.2s ease;
+
+    &:hover {
+        border-color: $color-500;
+        background-color: $color-100;
+    }
+}
+
+.categoryName {
+    @include h3;
+    @include mobile {
+        @include h3-mobile;
+    }
+    font-weight: 600;
+}
+
+.productCard {
+    background-color: $bg-card;
+    border: 1px solid $border;
+    transition: box-shadow 0.2s ease;
+
+    &:hover {
+        box-shadow: 0 4px 15px $shadow;
+    }
+}
+
+.productImgPlaceholder {
+    width: 100%;
+    aspect-ratio: 1;
+    background-color: $color-100;
+    border-radius: 8px;
+    margin-bottom: 12px;
+}
+
+.productBrand {
+    @include p2;
+    @include mobile {
+        @include p2-mobile;
+    }
+}
+
+.productName {
+    @include p1;
+    @include mobile {
+        @include p1-mobile;
+    }
+    font-weight: 600;
+    margin: 4px 0;
+}
+
+.productPrice {
+    @include h4;
+    @include mobile {
+        @include h4-mobile;
+    }
+    color: $color-700;
+}
+
+.newsCard {
+    background-color: $bg-card;
+    border: 1px solid $border;
+}
+
+.badgeNews {
+    background-color: $bg-info;
+    color: $text-info;
+    width: fit-content;
+}
+.badgePromo {
+    background-color: $bg-danger;
+    color: $text-danger;
+    width: fit-content;
+}
+
+.newsTitle {
+    @include h3;
+    @include mobile {
+        @include h3-mobile;
+    }
+    margin-top: 8px;
+}

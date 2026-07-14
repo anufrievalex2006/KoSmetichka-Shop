@@ -14,4 +14,5 @@ public class LoginDto {
     private String email;
     @NotBlank(message = "Введите пароль")
     private String password;
+    private Boolean rememberMe;
 }

@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# docs
+*.md.repomix
+backend.md
+frontend.md
+DOCS_FOR_AI.md

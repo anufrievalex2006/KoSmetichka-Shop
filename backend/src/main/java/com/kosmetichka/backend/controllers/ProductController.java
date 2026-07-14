@@ -1,13 +1,20 @@
 package com.kosmetichka.backend.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kosmetichka.backend.dtos.requests.create.ProductCreateDto;
+import com.kosmetichka.backend.dtos.requests.filter.AttributeFilterDto;
 import com.kosmetichka.backend.dtos.requests.filter.ProductFilterDto;
 import com.kosmetichka.backend.dtos.requests.update.ProductUpdateDto;
 import com.kosmetichka.backend.dtos.responses.PageResponse;
 import com.kosmetichka.backend.dtos.responses.ProductResponse;
 import com.kosmetichka.backend.services.ProductService;
+import com.kosmetichka.backend.utilities.exceptions.BadRequestException;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
@@ -17,13 +24,17 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
+@Tag(name = "Товары", description = "Управление товарами (CRUD с фильтрацией, пагинацией и сортировкой)")
 @RestController
 @RequestMapping("/api/products")
 @RequiredArgsConstructor
 public class ProductController {
     private final ProductService service;
+    private static final ObjectMapper mapper = new ObjectMapper();
 
     @GetMapping
     public ResponseEntity<PageResponse<ProductResponse>> getAll(
@@ -32,7 +43,8 @@ public class ProductController {
             @RequestParam(required = false)UUID brandId,
             @RequestParam(required = false)BigDecimal minPrice,
             @RequestParam(required = false)BigDecimal maxPrice,
-            @PageableDefault(size = 20) @SortDefault(sort = "name")Pageable pageable
+            @RequestParam(required = false) String attributes,
+            @ParameterObject @PageableDefault(size = 20) @SortDefault(sort = "name")Pageable pageable
     ) {
         ProductFilterDto f = ProductFilterDto.builder()
                 .search(search)
@@ -40,6 +52,7 @@ public class ProductController {
                 .brandId(brandId)
                 .minPrice(minPrice)
                 .maxPrice(maxPrice)
+                .attributes(parse(attributes))
                 .build();
         return ResponseEntity.ok(service.get(f, pageable));
     }
@@ -59,5 +72,27 @@ public class ProductController {
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    private Map<UUID, AttributeFilterDto> parse(String raw) {
+        if (raw == null || raw.isBlank())
+            return null;
+
+        Map<String, AttributeFilterDto> res;
+        try {
+            res = mapper.readValue(raw, new TypeReference<Map<String, AttributeFilterDto>>() {});
+        } catch (JsonProcessingException e) {
+            throw new BadRequestException("Некорректный формат фильтра по атрибутам");
+        }
+        return res.entrySet().stream().collect(Collectors.toMap(
+                e -> {
+                    try {
+                        return UUID.fromString(e.getKey());
+                    }
+                    catch (IllegalArgumentException ex) {
+                        throw new BadRequestException("Некорректный идентификатор атрибута в фильтре");
+                    }
+                }, Map.Entry::getValue
+        ));
     }
 }

@@ -11,7 +11,9 @@ public interface ProductMapper {
     ProductResponse toResponse(Product p);
     @Mapping(target = "category.id", source = "categoryId")
     @Mapping(target = "brand.id", source = "brandId")
+    @Mapping(target = "attributeValues", ignore = true)
     Product toEntity(ProductCreateDto req);
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "attributeValues", ignore = true)
     void updateEntity(ProductUpdateDto req, @MappingTarget Product p);
 }

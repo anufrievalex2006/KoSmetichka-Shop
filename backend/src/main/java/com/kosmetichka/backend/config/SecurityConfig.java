@@ -4,6 +4,7 @@ import com.kosmetichka.backend.models.api.User;
 import com.kosmetichka.backend.repos.UserRepo;
 import com.kosmetichka.backend.security.JwtFilter;
 import com.kosmetichka.backend.security.UserPrincipal;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,10 +39,23 @@ public class SecurityConfig {
                 .cors(c -> c.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .anonymous(AbstractHttpConfigurer::disable)
+                .exceptionHandling(e -> e
+                        .authenticationEntryPoint((req, res, ex) -> {
+                            res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                            res.setContentType("application/json");
+                            res.getWriter().write("{\"message\":\"Необходима авторизация\"}");
+                        })
+                        .accessDeniedHandler((req, res, ex) -> {
+                            res.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                            res.setContentType("application/json");
+                            res.getWriter().write("{\"message\": \"У вас нет прав на это действие\"}");
+                        })
+                )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.GET,
                                 "/api/products/**", "/api/categories/**", "/api/attributes/**",
-                                "/api/brands/**", "/api/content/**", "/api/shops/**"
+                                "/api/brands/**", "/api/content/**", "/api/shop", "/api/shop/**"
                         ).permitAll()
 
                         .requestMatchers("/api/auth/**").permitAll()
@@ -53,11 +67,11 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/files/**").hasAnyRole("ADMIN", "CREATOR")
 
                         .requestMatchers(HttpMethod.POST, "/api/products/**", "/api/categories/**",
-                                "/api/attributes/**", "/api/brands/**", "/api/shops/**").hasAnyRole("ADMIN", "CREATOR")
+                                "/api/attributes/**", "/api/brands/**", "/api/shop/**").hasAnyRole("ADMIN", "CREATOR")
                         .requestMatchers(HttpMethod.PATCH, "/api/products/**", "/api/categories/**",
-                                "/api/attributes/**", "/api/brands/**", "/api/shops/**").hasAnyRole("ADMIN", "CREATOR")
+                                "/api/attributes/**", "/api/brands/**", "/api/shop", "/api/shop/**").hasAnyRole("ADMIN", "CREATOR")
                         .requestMatchers(HttpMethod.DELETE, "/api/products/**", "/api/categories/**",
-                                "/api/attributes/**", "/api/brands/**", "/api/shops/**").hasAnyRole("ADMIN", "CREATOR")
+                                "/api/attributes/**", "/api/brands/**", "/api/shop/**").hasAnyRole("ADMIN", "CREATOR")
 
                         .requestMatchers(HttpMethod.POST, "/api/content/**").hasAnyRole("ADMIN", "CREATOR")
                         .requestMatchers(HttpMethod.PATCH, "/api/content/**").hasAnyRole("ADMIN", "CREATOR")
@@ -69,6 +83,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/users/**").hasRole("ADMIN")
 
                         .requestMatchers("/api/cart/**").authenticated()
+
+                        .requestMatchers("/api/admin/**").hasAnyRole("ADMIN", "CREATOR")
 
                         .anyRequest().authenticated()
                 )

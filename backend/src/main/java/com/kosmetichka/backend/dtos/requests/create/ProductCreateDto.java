@@ -5,6 +5,7 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,6 +19,7 @@ public class ProductCreateDto {
     private String barCodeNumber;
     private String article;
     private String description;
+    private String photoUrl;
     @NotNull(message = "Введите количество товара")
     @Min(value = 0, message = "Количество товара не может быть отрицательным")
     private Integer quantity;
@@ -28,6 +30,6 @@ public class ProductCreateDto {
     private UUID categoryId;
     @NotNull(message = "Выберите производителя товара")
     private UUID brandId;
-    @Valid
-    private List<AttributeValueCreateDto> attributeValues;
+    @Builder.Default
+    private List<@Valid AttributeValueCreateDto> attributeValues = new ArrayList<>();
 }

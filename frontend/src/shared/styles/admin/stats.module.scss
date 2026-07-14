@@ -1,0 +1,24 @@
+@use "@/shared/styles/vars" as *;
+@use "@/shared/styles/mixins" as *;
+@use "@/shared/styles/fonts" as *;
+
+.container {
+    display: flex;
+    flex-direction: column;
+    background-color: $bg-primary;
+    color: $text-primary;
+}
+
+.pageTitle {
+    @include h1;
+    @include mobile {
+        @include h1-mobile;
+    }
+}
+
+.statsDiv {
+    border: 2px solid $border-strong;
+    border-radius: 16px;
+    padding: 10px;
+    padding-left: 0;
+}

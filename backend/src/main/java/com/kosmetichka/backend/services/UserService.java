@@ -1,6 +1,7 @@
 package com.kosmetichka.backend.services;
 
 import com.kosmetichka.backend.dtos.requests.update.PasswordUpdateDto;
+import com.kosmetichka.backend.dtos.requests.update.UserRoleUpdateDto;
 import com.kosmetichka.backend.dtos.requests.update.UserUpdateDto;
 import com.kosmetichka.backend.dtos.responses.StatisticsResponse;
 import com.kosmetichka.backend.dtos.responses.UserResponse;
@@ -13,7 +14,9 @@ import com.kosmetichka.backend.utilities.mappers.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -24,10 +27,11 @@ public class UserService {
     private final UserRepo repo;
     private final UserMapper mapper;
     private final PasswordEncoder encoder;
+    private final FileStorageService service;
 
     public List<StatisticsResponse> getStatistics() {
         return repo.countRegistrationsByDay().stream()
-                .map(r -> new StatisticsResponse((LocalDate) r[0], (long) r[1]))
+                .map(r -> new StatisticsResponse(((Date) r[0]).toLocalDate(), (long) r[1]))
                 .toList();
     }
     public UserResponse getProfile(UserPrincipal pr) {
@@ -37,6 +41,26 @@ public class UserService {
         User u = repo.findById(pr.getId())
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
         mapper.updateEntity(req, u);
+        return mapper.toResponse(repo.save(u));
+    }
+    public UserResponse updateAvatar(UserPrincipal pr, MultipartFile file) {
+        User u = repo.findById(pr.getId())
+                .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
+
+        String oldUrl = u.getAvatarUrl(), newUrl = service.upload(file);
+        u.setAvatarUrl(newUrl);
+        User saved = repo.save(u);
+
+        service.delete(oldUrl);
+        return mapper.toResponse(saved);
+    }
+    public UserResponse updateRole(UserPrincipal pr, UUID id, UserRoleUpdateDto req) {
+        if (pr.getId().equals(id))
+            throw new BadRequestException("Вы не можете изменить роль самому себе");
+
+        User u = repo.findById(id)
+                .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
+        u.setRole(req.getRole());
         return mapper.toResponse(repo.save(u));
     }
     public void changePassword(UserPrincipal pr, PasswordUpdateDto req) {
@@ -54,5 +78,13 @@ public class UserService {
         if (!repo.existsById(id))
             throw new NotFoundException("Пользователь не найден");
         repo.deleteById(id);
+    }
+    public UserResponse deleteAvatar(UserPrincipal pr) {
+        User u = repo.findById(pr.getId())
+                .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
+
+        service.delete(u.getAvatarUrl());
+        u.setAvatarUrl(null);
+        return mapper.toResponse(repo.save(u));
     }
 }

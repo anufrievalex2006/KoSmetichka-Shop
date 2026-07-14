@@ -4,6 +4,7 @@ import com.kosmetichka.backend.dtos.requests.create.CategoryCreateDto;
 import com.kosmetichka.backend.dtos.requests.update.CategoryUpdateDto;
 import com.kosmetichka.backend.dtos.responses.CategoryResponse;
 import com.kosmetichka.backend.services.CategoryService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+@Tag(name = "Категории", description = "Категории товаров")
 @RestController
 @RequestMapping("/api/categories")
 @RequiredArgsConstructor

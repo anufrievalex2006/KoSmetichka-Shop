@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
+import java.time.Duration;
 import java.util.Date;
+import java.util.UUID;
 
 @Service
 public class JwtService {
@@ -22,9 +24,10 @@ public class JwtService {
     private SecretKey getKey() {
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
     }
-    private String buildToken(String subject, long expiration) {
+    private String buildToken(String subject, long expiration, String type) {
         return Jwts.builder()
                 .subject(subject)
+                .claim("type", type)
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(getKey())
@@ -32,18 +35,52 @@ public class JwtService {
     }
 
     public String generateAccessToken(UserPrincipal pr) {
-        return buildToken(pr.getUsername(), accessExpiration);
+        return buildToken(pr.getId().toString(), accessExpiration, "access");
     }
     public String generateRefreshToken(UserPrincipal pr) {
-        return buildToken(pr.getUsername(), refreshExpiration);
+        return buildToken(pr.getId().toString(), refreshExpiration, "refresh");
     }
-    public String extractEmail(String token) {
-        return Jwts.parser()
+    public String generateRefreshToken(UserPrincipal pr, Duration ttl, boolean rememberMe) {
+        return Jwts.builder()
+                .subject(pr.getId().toString())
+                .claim("type", "refresh")
+                .claim("rememberMe", rememberMe)
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + ttl.toMillis()))
+                .signWith(getKey())
+                .compact();
+    }
+    public boolean isTokenOfType(String token, String type) {
+        try {
+            String t = Jwts.parser()
+                    .verifyWith(getKey())
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload()
+                    .get("type", String.class);
+            return type.equals(t);
+        }
+        catch (JwtException | IllegalArgumentException e) {
+            return false;
+        }
+    }
+    public UUID extractUserId(String token) {
+        String subj = Jwts.parser()
                 .verifyWith(getKey())
                 .build()
                 .parseSignedClaims(token)
                 .getPayload()
                 .getSubject();
+        return UUID.fromString(subj);
+    }
+    public boolean extractRememberMe(String token) {
+        Boolean x = Jwts.parser()
+                .verifyWith(getKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .get("rememberMe", Boolean.class);
+        return Boolean.TRUE.equals(x);
     }
     public boolean isTokenValid(String token) {
         try {
