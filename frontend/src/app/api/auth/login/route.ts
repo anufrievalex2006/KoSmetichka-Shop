@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { API_URL } from '@/shared/api/api';
 import { setAuthCookies } from '../authCookies';
+import { SERVER_API_URL } from '@/shared/api/serverApiUrl';
 
 interface LoginRequest {
     email: string;
@@ -17,7 +17,7 @@ interface LoginResponse {
 export async function POST(req: NextRequest) {
     try {
         const body = (await req.json()) as LoginRequest;
-        const res = await fetch(`${API_URL}/auth/login`, {
+        const res = await fetch(`${SERVER_API_URL}/auth/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(body),

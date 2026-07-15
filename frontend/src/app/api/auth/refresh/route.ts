@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
-import { API_URL } from '@/shared/api/api';
 import { clearAuthCookies, setAuthCookies } from '../authCookies';
+import { SERVER_API_URL } from '@/shared/api/serverApiUrl';
 
 interface RefreshResponse {
     accessToken?: string;
@@ -17,7 +17,7 @@ export async function POST() {
 
     const rememberMe = store.get('remember-me')?.value === '1';
     try {
-        const res = await fetch(`${API_URL}/auth/refresh`, {
+        const res = await fetch(`${SERVER_API_URL}/auth/refresh`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ refreshToken: rtoken }),

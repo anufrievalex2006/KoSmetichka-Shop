@@ -3,12 +3,15 @@ import { Footer } from "@/widgets/Footer";
 import { Header } from "@/widgets/Header";
 import { ProductsSearchMain } from "@/widgets/search/ProductsSearchMain";
 import { Box } from "@mantine/core";
+import { Suspense } from "react";
 
 export const ProductsSearchPage = () => {
     return (
         <Box className={styles.container}>
             <Header></Header>
-            <ProductsSearchMain></ProductsSearchMain>
+            <Suspense>
+                <ProductsSearchMain></ProductsSearchMain>
+            </Suspense>
             <Footer></Footer>
         </Box>
     )
