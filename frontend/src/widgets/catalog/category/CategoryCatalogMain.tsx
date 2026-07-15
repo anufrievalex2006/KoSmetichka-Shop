@@ -9,8 +9,9 @@ import { useProductFilters } from "@/features/admin/productFilters";
 import { useProductsList } from "@/features/admin/products";
 import styles from "@/shared/styles/catalog.module.scss";
 import { AttributeFilterField } from "@/widgets/admin/categoryDetails/products/AttributeFilterField";
-import { Button, Group, Loader, NumberInput, Select, SimpleGrid, Stack, Text, TextInput, Title } from "@mantine/core";
+import { Button, Group, Loader, NumberInput, Pagination, Select, SimpleGrid, Stack, Text, TextInput, Title } from "@mantine/core";
 import { CategoryProductCard } from "./CategoryProductCard";
+import { AttributeFilterValue } from "@/domain";
 
 interface Props {
     categoryId: string;
@@ -34,7 +35,7 @@ export const CategoryCatalogMain = ({categoryId}: Props) => {
     const {products, pagination, isLoading: areProdsLoading, isFetching, error} = useProductsList(categoryId, filters, pRepo);
     const {attributes} = useCategoryAttributes(categoryId, aRepo);
 
-    const setAttrFilter = (attrId: string, value: string | null) => {
+    const setAttrFilter = (attrId: string, value: AttributeFilterValue | undefined) => {
         const next = {...filters.attributes};
         if (value)
             next[attrId] = value;
@@ -130,7 +131,7 @@ export const CategoryCatalogMain = ({categoryId}: Props) => {
                         </Group>
                         {attributes?.map(attr => (
                             <AttributeFilterField key={attr.id} attribute={attr} value={
-                                filters.attributes?.[attr.id] ?? ""
+                                filters.attributes?.[attr.id]
                             } onChange={
                                 (x) => setAttrFilter(attr.id, x)
                             }></AttributeFilterField>
@@ -156,6 +157,16 @@ export const CategoryCatalogMain = ({categoryId}: Props) => {
                             <CategoryProductCard key={p.id} product={p}></CategoryProductCard>
                         ))}
                     </SimpleGrid>
+                )}
+                {!isLoading && !error && pagination.totalPages! > 1 && (
+                    <Pagination total={pagination.totalPages!} value={
+                        (pagination.page ?? 0) + 1
+                    } onChange={
+                        (page) => setFilters(prev => ({
+                            ...prev,
+                            page: page - 1
+                        }))
+                    }></Pagination>
                 )}
             </Stack>
         </Stack>

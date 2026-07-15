@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
-import { API_URL } from '@/shared/api/api';
 import { clearAuthCookies } from '../authCookies';
+import { SERVER_API_URL } from '@/shared/api/serverApiUrl';
 
 export async function POST() {
     const store = await cookies();
@@ -9,7 +9,7 @@ export async function POST() {
 
     if (atoken) {
         try {
-            await fetch(`${API_URL}/auth/logout`, {
+            await fetch(`${SERVER_API_URL}/auth/logout`, {
                 method: 'POST',
                 headers: { Authorization: `Bearer ${atoken}` },
             });

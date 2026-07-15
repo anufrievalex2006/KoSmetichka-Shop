@@ -1,6 +1,6 @@
-import { API_URL } from "@/shared/api/api";
 import { NextRequest, NextResponse } from "next/server";
 import { setAuthCookies } from "../authCookies";
+import { SERVER_API_URL } from "@/shared/api/serverApiUrl";
 
 interface RegisterResponse {
     accessToken?: string;
@@ -11,7 +11,7 @@ interface RegisterResponse {
 export async function POST(req: NextRequest) {
     try {
         const body = await req.json();
-        const res = await fetch(`${API_URL}/auth/register`, {
+        const res = await fetch(`${SERVER_API_URL}/auth/register`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
