@@ -57,29 +57,24 @@ cd KoSmetichka-Shop
 ### 2. Настроить переменные окружения
 Создайте файл `.env` в корне проекта (рядом с `docker-compose.yml`) со следующими переменными:
 ```
-DB_PASSWORD=
-MINIO_ROOT_USER=
-MINIO_ROOT_PASSWORD=
-JWT_SECRET=
-MAIL_USERNAME=
-MAIL_PASSWORD=
+DB_PASSWORD=your_db_password
+MINIO_ROOT_USER=minio_admin
+MINIO_ROOT_PASSWORD=minio_password
+JWT_SECRET=your_base64_jwt_secret_key_here
+MAIL_USERNAME=your_email@example.com
+MAIL_PASSWORD=your_email_app_password
 FRONTEND_URL=http://localhost:3000
+NEXT_PUBLIC_API_URL=http://localhost:8080/api
 ```
 P.S. `JWT_SECRET` — произвольная base64-строка достаточной длины. `MAIL_USERNAME`/`MAIL_PASSWORD` — учётные данные почтового ящика для отправки писем (восстановление пароля, отчёт по заказу).
-### 3. Запустить контейнер с бэкендом, PostgreSQL и MinIO
+### 3. Запустить все контейнеры
 ```bash
 docker-compose up -d --build
 ```
-Backend будет доступен по адресу `http://localhost:8080`, Swagger UI — по `http://localhost:8080/swagger-ui.html`, консоль MinIO — по `http://localhost:9001`.
-### 4. Настроить Frontend
-Создайте файл .env.local в папке `frontend`:
-```
-NEXT_PUBLIC_API_URL=http://localhost:8080/api
-```
-Затем:
-```bash
-cd frontend
-npm install
-npm run dev
-```
-Приложение будет доступно по адресу `http://localhost:3000`
+Docker Compose автоматически соберет и запустит все контейнеры (Frontend, Backend, СУБД + MinIO)
+
+Приложение будет доступно по следующим адресам:
+* **Frontend** - http://localhost:3000
+* **Backend** - http://localhost:8080/api
+* **Спецификация API в Swagger** - http://localhost:8080/swagger-ui/index.html
+* **Консоль MinIO** - http://localhost:9001
